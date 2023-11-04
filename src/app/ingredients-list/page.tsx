@@ -20,7 +20,7 @@ const IngredientsListPage = () => {
             <IngredientCard
                 src={apple.src}
                 alt="Apple"
-                label="Apple"/>
+                label="Apples"/>
             <IngredientCard 
               src={apple.src}
               alt="Apple"
