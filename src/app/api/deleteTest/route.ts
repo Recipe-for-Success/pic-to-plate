@@ -3,7 +3,7 @@ import { DeleteItemCommandOutput } from "@aws-sdk/client-dynamodb";
 
 export const DELETE = async() => {
     let itemData: DeleteItemCommandOutput;
-    itemData = await deleteItem();
+    itemData = await deleteItem("UPC", "UPC", "N", 123456789012);
 
     // console.log("Retrieved DATA: ___ ", itemData);
 

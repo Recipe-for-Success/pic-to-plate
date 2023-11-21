@@ -3,7 +3,7 @@ import { GetItemCommandOutput } from "@aws-sdk/client-dynamodb";
 
 export const GET = async() => {
     let itemData: GetItemCommandOutput;
-    itemData = await readItem();
+    itemData = await readItem("EspressoDrinks", "DrinkName", "S", "Coffee");
 
     // console.log("Retrieved DATA: ___ ", itemData);
 
