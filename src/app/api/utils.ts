@@ -1,5 +1,9 @@
-import { PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand} from '@aws-sdk/client-dynamodb'; 
+import { PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, AttributeValue} from '@aws-sdk/client-dynamodb'; 
 import dbclient from '@/lib/dynamodb';
+
+const convertToAttributeValue = (value: string | number): AttributeValue => {
+  return typeof value === "number" ? { N: value.toString() } : { S: value };
+};
 
 export const createItem = async () => {
     const command = new PutItemCommand({
@@ -16,13 +20,14 @@ export const createItem = async () => {
     return response;
 }
 
-export const readItem = async () => {
+
+export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: any) => {
+    const key: Record<string, AttributeValue> = {};
+    key[keyName] = convertToAttributeValue(keyValue);
+    
     const command = new GetItemCommand({
-        TableName: "EspressoDrinks",
- 
-        Key: {
-            DrinkName: { S: "Coffee" },
-        },
+        TableName: tableName,
+        Key: key,
     });
 
     const response = await dbclient.send(command);
@@ -48,12 +53,13 @@ export const updateItem = async () => {
     return response;    
 }
 
-export const deleteItem = async () => {
+export const deleteItem = async (tableName: string, keyName: string, keyType: string, keyValue: any) => {
+    const key: Record<string, AttributeValue> = {};
+    key[keyName] = convertToAttributeValue(keyValue);
+    
     const command = new DeleteItemCommand({
-        TableName: "EspressoDrinks",
-        Key: {
-            DrinkName: { S: "Coffee" },
-        }
+        TableName: tableName,
+        Key: key,
     });
 
     const response = await dbclient.send(command);
