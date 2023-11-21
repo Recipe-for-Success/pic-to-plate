@@ -1,26 +1,14 @@
 'use client'
 
-// export default function Test() {
-//     const data = fetch("./api/getTest")
-//         .then(response => response.json())
-//         .then(data => console.log(data))
-//         .catch(error => console.error('Error:', error));
-
-//     return (
-//         <>
-//             <p>This works!</p>
-//         </>
-//     )
-// }
-// test.tsx
-
 import { useEffect } from 'react';
 
 const Test: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/getTest');
+                const response = await fetch(
+                    `/api/identify_upc`
+                );
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -207,4 +195,4 @@ const DeleteTest: React.FC = () => {
     );
 };
 
-export default PutTest;
+export default Test;
