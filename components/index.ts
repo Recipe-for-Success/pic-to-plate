@@ -11,17 +11,24 @@ import TextButton from "./buttons/TextButton"
 import IconTextButton from "./buttons/IconTextButton"
 
 import IngredientCard from "./IngredientCard"
+import Scanner from "./Scanner"
 export {
     //ComponentName,
+    
+    //Icons
     Camera,
     Download,
     Like,
     Share,
     Video,
-
+    
+    //Buttons
     IconButton,
     TextButton,
     IconTextButton,
     
+
+    //Components
     IngredientCard,
+    Scanner,
 }

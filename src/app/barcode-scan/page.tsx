@@ -1,17 +1,27 @@
+"use client"
 import React from 'react'
 import Link from 'next/link'
-import {TextButton} from '../../../components/index'
+import {TextButton, Scanner} from '../../../components/index'
 
 const BarcodeScanPage = () => {
+  const onDataCapture = (dataURL: string | null) => {
+    if(dataURL) {
+      console.log("We got the image, using it now.")
+      //Modify image to fit data format? (not sure if needed yet)
+      //Send image data to be scanned for upc code
+
+
+      return
+    }
+    console.log("Image was not found, returning without calling API.")
+  }
   return (
     <>
       <div className="flex m-5 justify-center text-center text-3xl font-bold">Scan Barcode</div>
-      <div className="flex mx-auto min-w-[400px] max-w-[400px] min-h-[400px] bg-gray-200">
-        {/*Placeholder div for camera component */}
+      <div className="flex justify-center">
+        <Scanner onDataCapture={onDataCapture}></Scanner>
       </div>
-      <div className="flex flex-col m-5 justify-center">
-          <TextButton text="Scan Ingredient" route="/ingredient-confirmation"></TextButton>
-      </div>
+      
     </>
   )
 }
