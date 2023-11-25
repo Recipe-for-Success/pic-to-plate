@@ -1,40 +1,44 @@
 'use client'
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-const Test: React.FC = () => {
+type UPCInformation = {
+    UPC: {
+        N: number
+    },
+    ingredient: {
+        S: String
+    },
+    productName: {
+        S: String
+    }
+}
+
+const Test = () => {
+    const [newItem, setNewItem] = useState<UPCInformation>();
+
     useEffect(() => {
         const fetchData = async () => {
+            const response = await fetch(
+                `/api/identify_upc?upc_id=` + String(111122223333),
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
             try {
-                const response = await fetch(
-                    `/api/identify_upc`
-                );
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const contentType = response.headers.get('Content-Type');
-
-                if (!contentType) {
-                    throw new Error('Invalid or missing Content.-.Type header');
-                }
-
                 const responseBody = await response.text();
 
-                if (!responseBody.trim()) {
-                    throw new Error('Empty response received');
-                }
-
-                // Parse JSON
                 const data = JSON.parse(responseBody);
                 console.log('Response:', data);
+
+                const newItemVal: UPCInformation = data.data.Item;
+                setNewItem(newItemVal);
             } catch (error: any) {
-                if (error instanceof SyntaxError) {
-                    console.error('Error: Invalid JSON');
-                } else {
-                    console.error('Error:', error.message);
-                }
+                console.error('Error:', error.message);
             }
         };
 
@@ -44,46 +48,30 @@ const Test: React.FC = () => {
     return (
         <>
             <p>This works!</p>
+            <p>UPC : {newItem ? (newItem.UPC.N) : null}</p>
+            <p>Ingredient : {newItem ? (newItem.ingredient.S) : null}</p>
+            <p>Product Name : {newItem ? (newItem.productName.S) : null}</p>
         </>
     );
 };
 
-const PostTest: React.FC = () => {
+const PostTest = () => {
     useEffect(() => {
         const fetchData = async () => {
+            const response = await fetch(
+                '/api/postTest',
+                {
+                    method: "POST"
+                }
+            );
+
             try {
-                const response = await fetch(
-                    '/api/postTest',
-                    {
-                        method: "POST"
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const contentType = response.headers.get('Content-Type');
-
-                if (!contentType) {
-                    throw new Error('Invalid or missing Content.-.Type header');
-                }
-
                 const responseBody = await response.text();
 
-                if (!responseBody.trim()) {
-                    throw new Error('Empty response received');
-                }
-
-                // Parse JSON
                 const data = JSON.parse(responseBody);
                 console.log('Response:', data);
             } catch (error: any) {
-                if (error instanceof SyntaxError) {
-                    console.error('Error: Invalid JSON');
-                } else {
-                    console.error('Error:', error.message);
-                }
+                console.error('Error:', error.message);
             }
         };
 
@@ -97,42 +85,24 @@ const PostTest: React.FC = () => {
     );
 };
 
-const PutTest: React.FC = () => {
+const PutTest = () => {
     useEffect(() => {
         const fetchData = async () => {
+
+            const response = await fetch(
+                '/api/putTest',
+                {
+                    method: "PUT"
+                }
+            );
+
             try {
-                const response = await fetch(
-                    '/api/putTest',
-                    {
-                        method: "PUT"
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const contentType = response.headers.get('Content-Type');
-
-                if (!contentType) {
-                    throw new Error('Invalid or missing Content.-.Type header');
-                }
-
                 const responseBody = await response.text();
 
-                if (!responseBody.trim()) {
-                    throw new Error('Empty response received');
-                }
-
-                // Parse JSON
                 const data = JSON.parse(responseBody);
                 console.log('Response:', data);
             } catch (error: any) {
-                if (error instanceof SyntaxError) {
-                    console.error('Error: Invalid JSON');
-                } else {
-                    console.error('Error:', error.message);
-                }
+                console.error('Error:', error.message);
             }
         };
 
@@ -146,42 +116,24 @@ const PutTest: React.FC = () => {
     );
 };
 
-const DeleteTest: React.FC = () => {
+const DeleteTest = () => {
     useEffect(() => {
         const fetchData = async () => {
+
+            const response = await fetch(
+                '/api/deleteTest',
+                {
+                    method: "DELETE"
+                }
+            );
+
             try {
-                const response = await fetch(
-                    '/api/deleteTest',
-                    {
-                        method: "DELETE"
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const contentType = response.headers.get('Content-Type');
-
-                if (!contentType) {
-                    throw new Error('Invalid or missing Content.-.Type header');
-                }
-
                 const responseBody = await response.text();
 
-                if (!responseBody.trim()) {
-                    throw new Error('Empty response received');
-                }
-
-                // Parse JSON
                 const data = JSON.parse(responseBody);
                 console.log('Response:', data);
             } catch (error: any) {
-                if (error instanceof SyntaxError) {
-                    console.error('Error: Invalid JSON');
-                } else {
-                    console.error('Error:', error.message);
-                }
+                console.error('Error:', error.message);
             }
         };
 

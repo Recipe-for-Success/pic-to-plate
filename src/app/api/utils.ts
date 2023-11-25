@@ -21,7 +21,7 @@ export const createItem = async () => {
 }
 
 
-export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: any) => {
+export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: number) => {
     const key: Record<string, AttributeValue> = {};
     key[keyName] = convertToAttributeValue(keyValue);
     
@@ -31,7 +31,7 @@ export const readItem = async (tableName: string, keyName: string, keyType: stri
     });
 
     const response = await dbclient.send(command);
-    console.log(response);
+    // console.log(response);
     return response;
 }
 
