@@ -1,6 +1,9 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react'
 import { TextButton } from '.'
+import { useImage } from './ImageContext'
+import Quagga from '@ericblade/quagga2'
+
 interface CapturedImage {
   dataURL: string | null
 }
@@ -12,33 +15,15 @@ interface ScannerProps {
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [capturedImage, setCapturedImage] = useState<CapturedImage>({ dataURL: null})
-
+  const { setImage } = useImage();
 
   useEffect(() => {
     getVideo()
   }, [])
 
-  const takeImage = () => {
-    const video = videoRef.current
-    if(video) {
-      const canvas = document.createElement('canvas')
-      console.log("Taking a photo. Say cheese!")
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      const context = canvas.getContext("2d")
-      context?.drawImage(video, 0, 0, canvas.width, canvas.height)
-
-      const dataURL = canvas.toDataURL('image/jpeg')
-      // setCapturedImage({ dataURL })
-      onDataCapture(dataURL)
-    }
-    
-  }
-
-
   const getVideo = () => {
     navigator.mediaDevices
-      .getUserMedia({ video: { width: 300 } })
+      .getUserMedia({ video: { width: 540 } })
       .then(stream => {
         let video = videoRef.current
         if(video){
@@ -55,11 +40,29 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       })
   }
 
+  const takeImage = () => {
+    const video = videoRef.current
+    if(video) {
+      const canvas = document.createElement('canvas')
+      console.log("Taking a photo. Say cheese!")
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const context = canvas.getContext("2d")
+      context?.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+      const dataURL = canvas.toDataURL('image/jpeg')
+      // setCapturedImage({ dataURL })
+      onDataCapture(dataURL)
+      setImage(dataURL)
+    }
+    
+  }
+
   return (
     <div>
         <video ref={videoRef}></video>
         <div className="flex justify-center">
-          <TextButton text="Scan Ingredient" route="/ingredient-confirmation"></TextButton>
+          <TextButton className="" text="Scan Ingredient" onClick={takeImage} route="/ingredient-confirmation"></TextButton>
         </div>
         {/* {capturedImage.dataURL && (
         <div>

@@ -1,19 +1,20 @@
 "use client"
 import React from 'react'
-import Link from 'next/link'
-import {TextButton, Scanner} from '../../../components/index'
+import { Scanner} from '../../../components/index'
 
+//This page is responsible for displaying interface for scanning barcodes.
+//It will scan the video feed and show a notification to the user when the UPC is confirmed from the video feed.
+//It has a scanner and a button. The scanner will capture the inputStream and recognize UPC codes. It will show the last successful scan as the ingredient to add.
+//Input: Scanner (Camera feed), Buttons
+//Output: UPC Product Name and Captured Image
 const BarcodeScanPage = () => {
+  
   const onDataCapture = (dataURL: string | null) => {
     if(dataURL) {
-      console.log("We got the image, using it now.")
       //Modify image to fit data format? (not sure if needed yet)
       //Send image data to be scanned for upc code
 
-
-      return
     }
-    console.log("Image was not found, returning without calling API.")
   }
   return (
     <>
