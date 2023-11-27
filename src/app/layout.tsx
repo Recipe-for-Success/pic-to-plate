@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Providers from '../../components/Providers'
+import Appbar from '../../components/Appbar'
 
 export const metadata: Metadata = {
   title: 'PicToPlate',
@@ -13,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-theme text-color">{children}</body>
+      <body className="bg-theme text-color">
+        <Providers>
+          <Appbar></Appbar>
+          {children}
+        </Providers>
+      </body>
     </html>
   )
 }

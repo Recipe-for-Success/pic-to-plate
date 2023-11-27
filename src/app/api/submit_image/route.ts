@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 
 type imageBase64 = {
     data: string
+    ingredient: string
 }
 
 export const POST = async(request: NextRequest) => {
@@ -11,7 +12,7 @@ export const POST = async(request: NextRequest) => {
     console.log("Here1: ", imageData, imageData.data);
 
     const imageResponse = await fetch(
-        'https://www.toptal.com/developers/postbin/1701003005007-0653195674531',
+        'https://www.toptal.com/developers/postbin/1701079907183-2279662012588',
         {
             method: "POST",
             headers: {
@@ -19,6 +20,7 @@ export const POST = async(request: NextRequest) => {
             },
             body: JSON.stringify({
                 data: imageData.data,
+                ingredient: imageData.ingredient
             })
         }
     );
