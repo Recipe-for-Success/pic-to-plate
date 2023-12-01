@@ -4,7 +4,7 @@ import camera from '../../public/icons/camera.svg'
 
 const Camera = () => {
   return (
-    <Image className=""
+    <Image className="mr-2"
         src={camera} 
         alt="Camera Icon"
         width={24}

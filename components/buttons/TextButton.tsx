@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 interface TextButtonProps {
-    className: string
+    className?: string
     text: string
-    route: string
-    onClick: () => void
+    route?: string
+    onClick?: () => void
 }
 
 const TextButton: React.FC<TextButtonProps> = ({className, text, route, onClick}) => {
@@ -20,18 +20,18 @@ const TextButton: React.FC<TextButtonProps> = ({className, text, route, onClick}
       onClick()
     }
 
-    // // If a route is provided, navigate to the specified route
-    // if (route) {
-    //   router.push(route)
-    // }
+    // If a route is provided, navigate to the specified route
+    if (route) {
+      router.push(route)
+    }
   }
   return (
     <>
-      <Link href={route}>
-        <button type="button" className={className} onClick={handleClick}>
+      <div className="rounded justify-center m-2 border-b-4 border-l-2 bg-primary shadow-lg text-gray-100 hover:text-gray-600">
+        <button type="button" className="flex px-4 py-1" onClick={handleClick}>
             {text}
         </button>
-      </Link>
+      </div>
     </>
   )
 }

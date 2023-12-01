@@ -1,5 +1,8 @@
 import React from 'react'
-import { Delete, IconButton, IngredientCard } from '.'
+import Delete from './icons/Delete';
+import IconButton from './buttons/IconButton';
+import IngredientCard from './IngredientCard';
+
 interface Ingredient {
     id: string
     src: string;

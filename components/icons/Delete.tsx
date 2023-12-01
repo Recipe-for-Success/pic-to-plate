@@ -4,7 +4,7 @@ import trash from '../../public/icons/trash.svg'
 
 const Delete = () => {
   return (
-    <Image 
+    <Image className="mr-2"
         src={trash} 
         alt="Trash Icon"
         width={24}

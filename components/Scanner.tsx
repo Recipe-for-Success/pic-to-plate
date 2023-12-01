@@ -1,7 +1,7 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react'
+import TextButton from './buttons/TextButton';
 import { useRouter } from 'next/navigation';
-import { TextButton } from '.'
 import { useImage } from './ImageContext'
 import { useBarcode } from './BarcodeContext';
 import Quagga from 'quagga'
@@ -12,7 +12,7 @@ interface CapturedImage {
 }
 
 interface ScannerProps {
-  onDataCapture: (dataURL: string) => void
+  onDataCapture?: (dataURL: string) => void
 }
 
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
@@ -70,7 +70,9 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
       const dataURL = canvas.toDataURL('image/jpeg')
       // setCapturedImage({ dataURL })
-      onDataCapture(dataURL)
+      if(onDataCapture) {
+        onDataCapture(dataURL)
+      }
       setImage(dataURL)
     }
 
@@ -81,17 +83,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       <video id="barcode-scanner" ref={videoRef}></video>
       <div className="flex justify-center">
         {/* <TextButton className="" text="Scan Ingredient" onClick={takeImage} route="/ingredient-confirmation"></TextButton> */}
-        {detectedBarcode && (
-          <div className="absolute top-0 left-0 m-4 bg-white p-2 rounded">
-            <p>Detected Barcode: {detectedBarcode}</p>
-          </div>
-        )}
       </div>
-      {/* {capturedImage.dataURL && (
-        <div>
-          <img src={capturedImage.dataURL} alt="Captured" />
-        </div>
-        )} */}
     </div>
   )
 }
