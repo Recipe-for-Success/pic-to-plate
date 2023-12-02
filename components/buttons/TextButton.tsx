@@ -27,7 +27,7 @@ const TextButton: React.FC<TextButtonProps> = ({className, text, route, onClick}
   }
   return (
     <>
-      <div className="rounded justify-center m-2 border-b-4 border-l-2 bg-primary shadow-lg text-gray-100 hover:text-gray-600">
+      <div className="rounded justify-center m-2 border-b-4 border-l-2 bg-secondary shadow-lg text-gray-100 hover:text-gray-600">
         <button type="button" className="flex px-4 py-1" onClick={handleClick}>
             {text}
         </button>

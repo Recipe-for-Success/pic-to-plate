@@ -31,8 +31,8 @@ const IngredientsListPage = () => {
           <div className="flex p-1 justify-center"><IconTextButton text="Take Picture" route="/photo-scan"><Camera></Camera></IconTextButton></div>
         </div>
         
-        <div className="max-w-[50%] mx-auto bg-primary">
-          <div className="text-center text-white bg-secondary text-2xl">Identified Ingredients</div>
+        <div className="rounded-lg max-w-[50%] mx-auto bg-primary">
+          <div className="text-center bg-secondary text-2xl rounded-t-lg">Identified Ingredients</div>
           <div className="grid max-h-[300px] p-2  mx-auto justify-items-center overflow-y-scroll">
             <IngredientList ingredients={ingredients} onDelete={handleDeleteIngredient}></IngredientList>
           </div>
