@@ -5,7 +5,6 @@ import Appbar from '../../components/Appbar'
 import { ImageProvider } from '../../components/ImageContext'
 import { IngredientProvider } from '../../components/IngredientContext'
 import { BarcodeProvider } from '../../components/BarcodeContext'
-
 export const metadata: Metadata = {
   title: 'PicToPlate',
   description: 'Machine Learning Suggested Recipes',

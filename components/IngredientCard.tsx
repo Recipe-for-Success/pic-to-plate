@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-
 interface IngredientCardProps {
   src: string;
   alt: string;
@@ -11,8 +10,8 @@ const IngredientCard: React.FC<IngredientCardProps> = ({ src, alt, label }) => {
     <div className="hover:bg-red-500 rounded-lg ">
       <Image className="h-auto max-w-full rounded-lg"
           src={src}
-          width={250}
-          height={250}
+          width={540}
+          height={540}
           alt={alt}
       />
       <label className="flex text-white justify-center">{label}</label>

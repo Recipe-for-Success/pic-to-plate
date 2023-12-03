@@ -1,8 +1,15 @@
+"use client"
 import React from 'react'
 import Link from 'next/link'
 import {Share, Download, Like, TextButton, IconButton} from '../../../components/index'
-
+//This page links to additional details for Recipes
+//It will use the recipe id to lookup data from the recipes table on the server and display it on the page.
+//Recipe Info
+//Nutrition Info and Visualization
 const RecipeInfoPage = () => {
+  const func = () => {
+
+  }
   return (
     <>
       <div className="flex m-5 bg-slate-500">
@@ -11,9 +18,9 @@ const RecipeInfoPage = () => {
           <label className="flex justify-start w-full whitespace-nowrap">Recipe 1</label>
         </div>
         <div className="flex w-1/2 justify-end">
-          <IconButton route="/ingredients-list"><Share></Share></IconButton>
-          <IconButton route="/ingredients-list"><Download></Download></IconButton>
-          <IconButton route="/ingredients-list"><Like></Like></IconButton>
+          <IconButton className="" route="/ingredients-list" onClick={func}><Share></Share></IconButton>
+          <IconButton className="" route="/ingredients-list" onClick={func}><Download></Download></IconButton>
+          <IconButton className="" route="/ingredients-list" onClick={func}><Like></Like></IconButton>
         </div>
         
       </div>
@@ -30,7 +37,7 @@ const RecipeInfoPage = () => {
       <div className="flex justify-center">
         {/* Back to Recipes Button  */}
         
-        <TextButton text="Back to Recipes" route="/recipe-suggestion"></TextButton>
+        <TextButton className="" text="Back to Recipes" onClick={func} route="/recipe-suggestion"></TextButton>
       </div>
     </>
   )
