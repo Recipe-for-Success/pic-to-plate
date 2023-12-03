@@ -1,4 +1,4 @@
-import { PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, AttributeValue, BatchGetItemCommand, BatchGetItemCommandOutput} from '@aws-sdk/client-dynamodb'; 
+import { PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, AttributeValue} from '@aws-sdk/client-dynamodb'; 
 import dbclient from '@/lib/dynamodb';
 
 const convertToAttributeValue = (value: string | number): AttributeValue => {
@@ -21,7 +21,7 @@ export const createItem = async () => {
 }
 
 
-export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: number | string) => {
+export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: number) => {
     const key: Record<string, AttributeValue> = {};
     key[keyName] = convertToAttributeValue(keyValue);
     
@@ -35,59 +35,16 @@ export const readItem = async (tableName: string, keyName: string, keyType: stri
     return response;
 }
 
-export const readBatch = async(tableName: string, keyName: string, keyType: string, keyValues: number[] | string[]) => {
-    let keysList: Record<string, AttributeValue>[] = [];
-
-    for (let val of keyValues) {
-        let keys: Record<string, AttributeValue> = {};
-        keys[keyName] = convertToAttributeValue(val);
-        keysList.push(keys);
-    }
-
-    const numBatches: number = Math.ceil(keysList.length * 1.0 / 100.0);
-
-    const command = new BatchGetItemCommand({
-        RequestItems: {
-            [tableName]: {
-                Keys: keysList.slice(0, Math.min(100, keysList.length)),
-            }
-        }
-    })
-
-    const response = await dbclient.send(command);
-
-    for (let i = 1; i < numBatches; i++) {
-        let start = 100 * i;
-        let end = Math.min(100 * (i+1), keysList.length);
-        
-        const command = new BatchGetItemCommand({
-            RequestItems: {
-                [tableName]: {
-                    Keys: keysList.slice(start, end),
-                    ProjectionExpression: "ID",
-                }
-            }
-        })
-
-        const response2 = await dbclient.send(command);
-        response?.Responses?.[tableName].push(...(response2?.Responses?.[tableName]?? []));  
-    }
-
-    // const response = await dbclient.send(command);
-    // console.log("REP: ", response);
-    // console.log("REP2: ", response?.Responses?.[tableName]);
-    return response;
-}
-
-export const updateItem = async (tableName: string, keyName: string, keyType: string, keyValue: number, updateExpression: string, expressionAttributeValues: Record<string, AttributeValue>) => {
-    const key: Record<string, AttributeValue> = {};
-    key[keyName] = convertToAttributeValue(keyValue);
-    
+export const updateItem = async () => {
     const command = new UpdateItemCommand({
-        TableName: tableName,
-        Key: key,
-        UpdateExpression: updateExpression,
-        ExpressionAttributeValues: expressionAttributeValues,
+        TableName: "EspressoDrinks",
+        Key: {
+            DrinkName: { S: "Coffee" },
+        },
+        UpdateExpression: "set isTasty = :newName",
+        ExpressionAttributeValues: {
+            ":newName": { BOOL: false },
+        },
         ReturnValues: "ALL_NEW",
     });
 
@@ -109,8 +66,6 @@ export const deleteItem = async (tableName: string, keyName: string, keyType: st
     console.log(response);
     return response;
 }
-
-
 
 const utils = {createItem, readItem, updateItem, deleteItem};
 

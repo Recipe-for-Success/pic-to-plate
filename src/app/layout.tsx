@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Providers from '../../components/Providers'
-import Appbar from '../../components/Appbar'
 import { ImageProvider } from '../../components/ImageContext'
 import { IngredientProvider } from '../../components/IngredientContext'
 import { BarcodeProvider } from '../../components/BarcodeContext'

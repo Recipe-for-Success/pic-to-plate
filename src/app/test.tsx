@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-type UPCData = {
+type UPCInformation = {
     UPC: {
         N: number
     },
@@ -14,21 +14,13 @@ type UPCData = {
     }
 }
 
-type RecipeData = {
-    ID: number;
-}
-
-type IngredientData = {
-    ID: string;
-}
-
-const IdentifyUPC = () => {
-    const [newItem, setNewItem] = useState<UPCData>();
+const Test = () => {
+    const [newItem, setNewItem] = useState<UPCInformation>();
 
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(
-                `/api/identify_upc?upc_id=070847811169`,
+                `/api/identify_upc?upc_id=` + String(111122223333),
                 {
                     method: "GET",
                     headers: {
@@ -43,7 +35,7 @@ const IdentifyUPC = () => {
                 const data = JSON.parse(responseBody);
                 console.log('Response:', data);
 
-                const newItemVal: UPCData = data.data.Item;
+                const newItemVal: UPCInformation = data.data.Item;
                 setNewItem(newItemVal);
             } catch (error: any) {
                 console.error('Error:', error.message);
@@ -63,19 +55,13 @@ const IdentifyUPC = () => {
     );
 };
 
-const IdentifyImage = () => {
+const PostTest = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(
-                '/api/identify_image',
+                '/api/postTest',
                 {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        data: "TestImage64",
-                    })
+                    method: "POST"
                 }
             );
 
@@ -99,18 +85,14 @@ const IdentifyImage = () => {
     );
 };
 
-const SubmitUPC = () => {
+const PutTest = () => {
     useEffect(() => {
         const fetchData = async () => {
 
             const response = await fetch(
-                '/api/submit_upc',
+                '/api/putTest',
                 {
-                    method: "PUT",
-                    body: JSON.stringify({
-                        upc_id: 123,
-                        ingredient: "pudding",
-                    })
+                    method: "PUT"
                 }
             );
 
@@ -165,114 +147,4 @@ const DeleteTest = () => {
     );
 };
 
-const GetRecipe = () => {
-    const [newItem, setNewItem] = useState<RecipeData>();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(
-                `/api/getRecipe?recipe_id=` + String(337820),
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            try {
-                const responseBody = await response.text();
-
-                const data = JSON.parse(responseBody);
-                console.log('Response:', data);
-
-                // const newItemVal: RecipeData = data.data.Item;
-                // setNewItem(newItemVal);
-            } catch (error: any) {
-                console.error('Error:', error.message);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    return (
-        <>
-            <p>This works!</p>
-        </>
-    );
-};
-
-const SuggestRecipes = () => {
-    const [newItem, setNewItem] = useState<IngredientData>();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(
-                `/api/suggest_recipes?&ID=olive oil&ID=salt&ID=water&ID=warm water&ID=black pepper&ID=pepper&ID=onion&ID=garlic&ID=ground beef&ID=tomato&ID=sugar&ID=ketchup&ID=clove&ID=sauce&ID=curry powder&ID=lime&ID=basil&ID=oregano&ID=thyme&ID=butter&ID=ghee&ID=oil&ID=vegetable oil&ID=swiss cheese&ID=parmesan cheese&ID=ham slice&ID=flour&ID=dry white wine&ID=dried sage&ID=cornstarch&ID=condensed cream chicken soup&ID=chicken breast&ID=rice`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            try {
-                const responseBody = await response.text();
-
-                const data = JSON.parse(responseBody);
-                console.log('Response!!!!:', data);
-            } catch (error: any) {
-                console.error('Error:', error.message);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    return (
-        <>
-            <p>This works!</p>
-        </>
-    );
-}
-
-const SubmitImage = () => {
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(
-                '/api/submit_image',
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        data: "TestImage64",
-                        ingredient: "TestIng!!!"
-                    })
-                }
-            );
-
-            try {
-                const responseBody = await response.text();
-
-                const data = JSON.parse(responseBody);
-                console.log('Response:', data);
-            } catch (error: any) {
-                console.error('Error:', error.message);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    return (
-        <>
-            <p>Posting!!!</p>
-        </>
-    );
-};
-
-export default IdentifyUPC;
+export default Test;
