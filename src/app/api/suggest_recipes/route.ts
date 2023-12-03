@@ -1,71 +1,71 @@
 import { NextRequest } from "next/server";
-import { readBatch, readItem } from "../utils";
+import { readBatch } from "../utils";
 import { AttributeValue, BatchGetItemCommandOutput, GetItemCommandOutput } from "@aws-sdk/client-dynamodb";
 
 export const GET = async(request: NextRequest) => {
     const searchParams = new URLSearchParams(request.url.split('?')[1]);
     let ingredients_string: string[] = searchParams.getAll("ID");
 
-    let itemData: BatchGetItemCommandOutput;
-    itemData = await readBatch("Ingredient", "ID", "S", ingredients_string);
-    
-    let ingredients = itemData.Responses?.Ingredient;
-    let data: AttributeValue[] = [];
+    // let itemData: BatchGetItemCommandOutput, countData: BatchGetItemCommandOutput;
+    const [itemData, countData] = await Promise.all([
+        readBatch("Ingredient", "ID", "S", ingredients_string),
+        readBatch("IngredientRecipeCounts", "ID", "S", ingredients_string)
+    ]);
 
-    if (ingredients) {
-      for (let i of ingredients) {
-        if (i && i.recipes) {
-          data.push(i.recipes);
+    let junk: any[] = ["cooking spray","cornmeal","italian seasoning","mozzarella cheese","mushroom","skim milk","tomato sauce","turkey pepperoni","unsweetened applesauce","vidalia onion","water","white flour","yeast"];
+    console.log("HELOOOOOOO!OO!!!: ", junk.length);
+    let ingredients: Record<string, AttributeValue>[] = Array.from(itemData.Responses.Ingredient);
+    let ingredientCounts: Record<string, AttributeValue>[] = Array.from(countData.Responses.IngredientRecipeCounts);
+
+    ingredients.sort((a, b) => a.ID.S.localeCompare(b.ID.S));
+    console.log("NEWITEMS 1 1 1 1 NOW: ", ingredients[ingredients.length - 1], "   ", ingredients[ingredients.length - 1].recipes.L );
+
+    ingredientCounts.sort((a, b) => a.ID.S.localeCompare(b.ID.S));
+    console.log("NEWCOUNTS 1 1 1 1 NOW: ", ingredientCounts[ingredientCounts.length - 1],"   ", ingredientCounts[ingredientCounts.length - 1].counts.L);
+
+
+
+    let myMap: { [key: number]: number } = {}, countMap: { [key: number]: number } = {}, displayRecipes: number[] = [], oneDown: number[] = [], twoDown: number[] = [];
+
+    for (let i = 0; i < ingredients?.length; i++) {
+        for (let j = 0; ingredients[i]?.recipes.L && j < ingredients[i].recipes.L.length; j++) {
+            if (ingredients[i] && ingredients[i].recipes.L[j]?.N && ingredientCounts[i]?.counts.L[j]?.N) {
+                myMap[+ingredients[i].recipes.L[j].N] = +ingredientCounts[i].counts.L[j].N;
+            } 
         }
-      }
     }
 
-    const combinedList: number[] = Array.prototype.concat.apply([], data.map((item) => (item?.NS?.map(Number) ?? []) as number[]));
+    countMap = {...myMap};
 
-    console.log(combinedList);
-
-    let recipeData: BatchGetItemCommandOutput;
-    recipeData = await readBatch("Recipe", "ID", "N", combinedList);
-
-    let myMap: { [key: number]: number } = {};
-    let displayRecipes: number[] = [];
-
-    if (!recipeData.Responses) {
-      throw new Error("why?")
-    } else {
-      for (let i of recipeData.Responses.Recipe) {
-        if (i && i.ID && i.ID.N) {
-          myMap[+i.ID.N] = i.ingredients.SS?.length?? -1;
+    for (let i of ingredients) {
+        for (let j of i.recipes.L) {
+            myMap[+j.N]--;
         }
-      }
     }
 
-    console.log("MAP1", myMap);
+    for (let i of ingredients) {
+        for (let j of i.recipes.L) {
+            let newRecipe: number = +j.N;
 
-    if (ingredients) {
-      for (let i of ingredients) {
-        if (i && i.recipes && i.recipes.NS) {
-          for (let j of i.recipes.NS) {
-            if (j) {
-              myMap[+j]--;
-
-              if (myMap[+j] == 0) {
-                let newRecipe: number = +j;
+            if (myMap[+j.N] == 0) {
                 displayRecipes.push(newRecipe);
-              }
+            } else if (myMap[+j.N] == 1) {
+                oneDown.push(newRecipe);
+            } else if (myMap[+j.N] == 2) {
+                twoDown.push(newRecipe);
             }
-          }
         }
-      }
     }
+    
+    displayRecipes.sort((a, b) => countMap[b] - countMap[a]);
+    oneDown.sort((a, b) => countMap[b] - countMap[a]);
+    twoDown.sort((a, b) => countMap[b] - countMap[a]);
 
-    console.log("MAP2", myMap);
-
-    let response = new Response(JSON.stringify({data: myMap}), {
-      status: 200,
-      headers: {
+    let response = new Response(JSON.stringify({data: [displayRecipes, oneDown, twoDown]}), {
+        status: 200,
+        headers: {
         'Content-Type': 'application/json',
-      },
+        },
     });
 
     return response;

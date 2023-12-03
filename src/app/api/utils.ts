@@ -73,14 +73,6 @@ export const readBatch = async(tableName: string, keyName: string, keyType: stri
         response?.Responses?.[tableName].push(...(response2?.Responses?.[tableName]?? []));  
     }
 
-    // const command = new BatchGetItemCommand({
-    //     RequestItems: {
-    //         [tableName]: {
-    //             Keys: keysList,
-    //         }
-    //     }
-    // })
-
     // const response = await dbclient.send(command);
     // console.log("REP: ", response);
     // console.log("REP2: ", response?.Responses?.[tableName]);

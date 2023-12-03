@@ -1,38 +1,61 @@
 import { NextRequest } from "next/server";
 
-type imageBase64 = {
-    data: string
-}
+type ImageBase64 = {
+  data: string;
+};
 
-export const POST = async(request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
+  try {
     const requestBody = await request.text();
-    const imageData: imageBase64 = JSON.parse(requestBody);
+    const imageData: ImageBase64 = JSON.parse(requestBody);
 
     console.log("Here1: ", imageData, imageData.data);
 
-    const imageResponse = await fetch(
-        'https://www.toptal.com/developers/postbin/1701003005007-0653195674531',
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                data: imageData.data,
-            })
-        }
-    );
+    const formData = new URLSearchParams({
+      image: imageData.data,
+    });
 
-    console.log("Here2: ", imageResponse);
+    console.log(formData.toString());
 
-    let response = new Response(JSON.stringify({data: imageResponse}), {
-      status: 200,
+    const imageResponse = await fetch('http://localhost:8000/recognize_image', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formData.toString(),
+    });
+
+    if (imageResponse.ok) {
+      const responseBody = await imageResponse.text();
+      console.log("Here2: ", responseBody);
+
+      const response = new Response(responseBody, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log("Here3: ", response);
+
+      return response;
+    } else {
+      console.error('Error:', imageResponse.statusText);
+      return new Response(JSON.stringify({ image: "null!" }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
+  } catch (error: any) {
+    console.error('Error:', error.message);
+    return new Response(JSON.stringify({ image: "null!" }), {
+      status: 500,
       headers: {
         'Content-Type': 'application/json',
       },
     });
-
-    console.log("Here3: ", response);
-
-    return response;
-}
+  }
+};
