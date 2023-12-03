@@ -18,11 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <Appbar></Appbar>
         <IngredientProvider>
           <ImageProvider>
             <BarcodeProvider>
-              <body className="bg-theme text-color">{children}</body>
+              <body className="bg-theme text-color"><Appbar></Appbar>{children}</body>
             </BarcodeProvider>
           </ImageProvider>
         </IngredientProvider>
