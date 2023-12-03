@@ -11,6 +11,8 @@ const config: Config = {
       'primary': '#1f6e8c',
       'secondary': '#2e8a99',
       'color': '#84a7a1',
+      'sky': '#87ceeb',
+      'white': '#ffffff'
     },
     extend: {},
   },
