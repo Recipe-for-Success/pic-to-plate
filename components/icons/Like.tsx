@@ -4,7 +4,7 @@ import like from '../../public/icons/like.svg'
 
 const Like = () => {
   return (
-    <Image 
+    <Image className=""
         src={like} 
         alt="Like Icon"
         width={24}

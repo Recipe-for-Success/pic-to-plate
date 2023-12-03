@@ -7,8 +7,8 @@ const Delete = () => {
     <Image 
         src={trash} 
         alt="Trash Icon"
-        width={24}
-        height={24}/>
+        width={12}
+        height={12}/>
   )
 }
 

@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 interface IconButtonProps {
-    className: string
+    className?: string
     children: ReactNode
-    route: string
-    onClick: () => void
+    route?: string
+    onClick?: () => void
 }
 
 const IconButton: React.FC<IconButtonProps> = ({className, route, children, onClick}) => {
@@ -20,18 +20,18 @@ const IconButton: React.FC<IconButtonProps> = ({className, route, children, onCl
       onClick()
     }
 
-    // // If a route is provided, navigate to the specified route
-    // if (route) {
-    //   router.push(route)
-    // }
+    // If a route is provided, navigate to the specified route
+    if (route) {
+      router.push(route)
+    }
   }
   return (
     <>
-      <Link href={route}>
-          <button type="button" className={className} onClick={handleClick}>
-              {children}
-          </button>
-      </Link> 
+      <div className="rounded justify-center m-2 border-b-4 border-l-2 bg-secondary shadow-lg">
+        <button type="button" className="flex p-2" onClick={handleClick}>
+            {children}
+        </button>
+      </div>
     </>
   )
 }

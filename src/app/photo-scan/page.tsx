@@ -1,7 +1,6 @@
 "use client"
 import React from 'react'
-import { Scanner } from '../../../components/index'
-
+import Scanner from '../../../components/Scanner'
 //This page is responsible for displaying interface for identifying ingredients from images using machine learning.
 //It will capture an image to submit to the machine learning model server for processing and predictions.
 //It has a scanner and a button. The scanner will capture the inputStream and take an image from the camera. 

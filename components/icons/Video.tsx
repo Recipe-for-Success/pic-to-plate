@@ -4,7 +4,7 @@ import video from '../../public/icons/video.svg'
 
 const Video = () => {
   return (
-    <Image 
+    <Image className="mr-2"
         src={video} 
         alt="Video Icon"
         width={24}
