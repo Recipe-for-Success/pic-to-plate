@@ -4,7 +4,7 @@ import share from '../../public/icons/share.svg'
 
 const Share = () => {
   return (
-    <Image 
+    <Image className=""
         src={share} 
         alt="Share Icon"
         width={24}

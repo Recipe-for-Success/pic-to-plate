@@ -15,13 +15,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <IngredientProvider>
-        <ImageProvider>
-          <BarcodeProvider>
-            <body className="bg-theme text-color">{children}</body>
-          </BarcodeProvider>
-        </ImageProvider>
-      </IngredientProvider>
+      <Providers>
+        <IngredientProvider>
+          <ImageProvider>
+            <BarcodeProvider>
+              <body className="bg-theme text-color"><Appbar></Appbar>{children}</body>
+            </BarcodeProvider>
+          </ImageProvider>
+        </IngredientProvider>
+      </Providers>
     </html>
   )
 }

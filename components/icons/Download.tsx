@@ -4,7 +4,7 @@ import download from '../../public/icons/download.svg'
 
 const Download = () => {
   return (
-    <Image 
+    <Image className=""
         src={download} 
         alt="Download Icon"
         width={24}

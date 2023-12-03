@@ -1,20 +1,32 @@
 import React from 'react'
 import Image from 'next/image'
+import IconButton from './buttons/IconButton';
+import { useIngredients } from './IngredientContext';
+import Delete from './icons/Delete';
 interface IngredientCardProps {
+  id: string;
   src: string;
   alt: string;
   label: string;
+  onDelete: (id: string) => void
 }
-const IngredientCard: React.FC<IngredientCardProps> = ({ src, alt, label }) => {
+const IngredientCard: React.FC<IngredientCardProps> = ({ id, src, alt, label, onDelete }) => {
   return (
-    <div className="hover:bg-red-500 rounded-lg ">
+    <div className="relative rounded-sm overflow-hidden">
       <Image className="h-auto max-w-full rounded-lg"
           src={src}
           width={540}
           height={540}
           alt={alt}
       />
-      <label className="flex text-white justify-center">{label}</label>
+      <div className="absolute inset-0 flex flex-col justify-start p-2">
+        <div className="flex justify-center">
+          <label className="text-white">{label}</label> 
+        </div>
+        <div className="absolute bottom-0 right-0 p-1 w-auto h-auto">
+          <IconButton onClick={() => onDelete(id)} route="/ingredients-list"><Delete></Delete></IconButton>
+        </div>
+      </div>
     </div>
   )
 }
