@@ -275,4 +275,4 @@ const SubmitImage = () => {
     );
 };
 
-export default IdentifyUPC;
+export default SuggestRecipes;

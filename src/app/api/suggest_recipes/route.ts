@@ -56,6 +56,9 @@ export const GET = async(request: NextRequest) => {
             }
         }
     }
+    displayRecipes = Array.from(new Set(displayRecipes));
+    oneDown = Array.from(new Set(oneDown));
+    twoDown = Array.from(new Set(twoDown));
     
     displayRecipes.sort((a, b) => countMap[b] - countMap[a]);
     oneDown.sort((a, b) => countMap[b] - countMap[a]);
