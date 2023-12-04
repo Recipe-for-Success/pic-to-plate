@@ -4,11 +4,13 @@ import IdentifyUPC from './test'
 import SuggestRecipes from './test'
 import SubmitUPC from './test'
 import IdentifyImage from './test'
+import { Button } from 'flowbite-react'
+import TextButton from '../../components/buttons/TextButton'
 
 export default function Home() {
   return (
     <main className="flex flex-col">
-      {/* <SuggestRecipes /> */}
+      {/* <SuggestRecipes />
       <h1 className="flex justify-center text-3xl bg-primary p-2 mx-auto w-full"> Website Interfaces</h1>
       <div className="flex flex-col p-1 m-2">
         <div className="flex justify-center">
@@ -29,9 +31,18 @@ export default function Home() {
         <div className="flex justify-center">
           <Link href="/ingredient-confirmation">Confirm Ingredient</Link>
         </div>
+      </div> */}
+
+      <div className="bg-center bg-bottom bg-cover bg-[url('./../../public/food.jpg')] h-screen max-w-screen p-0 overflow-hidden">
+        <div className="flex flex-col md:pl-12 pt-24 md:items-start items-center">
+          <h1 className="md:pt-8 font-bold xl:text-8xl md:text-7xl sm:text-5xl text-4xl text-white max-w-fit">Pic To Plate</h1>
+          <div className="mt-2">
+            <TextButton text="Explore Now" route='./ingredients-list'></TextButton>
+          </div>
+        </div>
       </div>
 
-
     </main>
+
   )
 }
