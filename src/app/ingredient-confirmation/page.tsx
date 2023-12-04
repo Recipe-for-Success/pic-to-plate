@@ -31,7 +31,7 @@ const IngredientConfirmationPage = () => {
     }
     handleAddIngredient(newIngredient)
     //submit upc
-    // fetchData()
+    fetchData()
     setDetectedBarcode(null)
   }
 
@@ -50,7 +50,7 @@ const IngredientConfirmationPage = () => {
       setIngredientName(input)
     }
     //submit upc with input
-    // fetchData()
+    fetchData()
     setDetectedBarcode(null)
   }
   
@@ -71,7 +71,7 @@ const IngredientConfirmationPage = () => {
         const responseBody = await response.text();
 
         const data = JSON.parse(responseBody);
-        console.log('Response:', data);
+        console.log('Wacky:', data);
     } catch (error: any) {
         console.error('Error:', error.message);
     }

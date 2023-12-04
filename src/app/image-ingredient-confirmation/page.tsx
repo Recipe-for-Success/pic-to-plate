@@ -30,7 +30,6 @@ const IngredientConfirmationPage = () => {
         label: ingredientName
     }
     handleAddIngredient(newIngredient)
-    // fetchData()
   }
 
   const affirmIngredient = () => {
@@ -47,7 +46,6 @@ const IngredientConfirmationPage = () => {
       handleAddIngredient(newIngredient)
       setIngredientName(input)
     }
-    // fetchData()
   }
 
   return (

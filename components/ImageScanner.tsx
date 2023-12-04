@@ -55,7 +55,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       }
       setImage(dataURL)
       setIngredientName('unidentified')
-      // fetchData(dataURL)
+      fetchData(dataURL.split(';base64,')[1])
     }
   }
 
