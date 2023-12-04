@@ -57,9 +57,12 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       })
   }
 
+  let done = false;
+
   const takeImage = () => {
     const video = videoRef.current
-    if (video) {
+    if (video && !done) {
+      done = true;
       const canvas = document.createElement('canvas')
       console.log("Taking a photo. Say cheese!")
       canvas.width = video.videoWidth
@@ -69,7 +72,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
       const dataURL = canvas.toDataURL('image/jpeg')
       // setCapturedImage({ dataURL })
-      if(onDataCapture) {
+      if (onDataCapture) {
         onDataCapture(dataURL)
       }
       setImage(dataURL)
@@ -77,27 +80,37 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
   }
 
-  const fetchData = async (detectedBarcode: string | null) => {
-    console.log(detectedBarcode)
+  const fetchData = async (detectedBarcode: string | null,) => {
+
+    console.log("blue!", detectedBarcode)
     const response = await fetch(
-      
-        `/api/identify_upc?upc_id=` + detectedBarcode,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }
+
+      `/api/identify_upc?upc_id=` + detectedBarcode,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
 
     try {
-        const responseBody = await response.text();
+      const responseBody = await response.text();
 
-        const data = JSON.parse(responseBody);
-        console.log('Response:', data);
-        setIngredientName(data.data.ingredient)
+      const data = JSON.parse(responseBody);
+      console.log('Response:', data);
+
+      if (data.data.ingredient) {
+        setIngredientName(data.data.ingredient);
+      } else if (data.data.Item) {
+        setIngredientName(data.data.Item.ingredient.S);
+        // console.log(data.data.Item.ingredient.S, "HERE IT COMES!!!");
+      }
+
+
+      // console.log(ingredientName, "is the test!");
     } catch (error: any) {
-        console.error('Error:', error.message);
+      console.error('Error:', error.message);
     }
   };
 

@@ -20,68 +20,73 @@ const IngredientConfirmationPage = () => {
   const handleAddIngredient = (newIngredient: { id: string; src: any; alt: string; label: string }) => {
     setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
   };
-  
+
   const addIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
     const newIngredient = {
-        id: convertedID.toString(36),
-        src: image,
-        alt: ingredientName,
-        label: ingredientName
+      id: convertedID.toString(36),
+      src: image,
+      alt: ingredientName,
+      label: ingredientName
     }
     handleAddIngredient(newIngredient)
     //submit upc
-    fetchData()
+    fetchData(ingredientName)
     setDetectedBarcode(null)
   }
 
+  console.log("WHY NOT: ", ingredientName);
+
   const affirmIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
-    if(textRef.current) {
+    if (textRef.current) {
       const input = textRef.current.value
       console.log(input)
       const newIngredient = {
-          id: convertedID.toString(36),
-          src: image,
-          alt: input,
-          label: input
+        id: convertedID.toString(36),
+        src: image,
+        alt: input,
+        label: input
       }
       handleAddIngredient(newIngredient)
       setIngredientName(input)
+      fetchData(input)
     }
     //submit upc with input
-    fetchData()
+
     setDetectedBarcode(null)
   }
-  
-  const fetchData = async () => {
-    if(detectedBarcode){
+
+  console.log(ingredientName, "is itnow!");
+
+  const fetchData = async (ingredient: string) => {
+    if (detectedBarcode && ingredient) {
       const id = parseInt(detectedBarcode, 10)
       const response = await fetch(
         '/api/submit_upc',
         {
-            method: "PUT",
-            body: JSON.stringify({
-                upc_id: id,
-                ingredient: ingredientName,
-            })
+          method: "PUT",
+          body: JSON.stringify({
+            upc_id: id,
+            ingredient: ingredient,
+          })
         }
-    );
+      );
 
-    try {
+      try {
         const responseBody = await response.text();
 
         const data = JSON.parse(responseBody);
         console.log('Wacky:', data);
-    } catch (error: any) {
+      } catch (error: any) {
         console.error('Error:', error.message);
-    }
+      }
     }
     else {
       return
     }
-    
-};
+
+  };
 
   return (
     <>
@@ -93,7 +98,7 @@ const IngredientConfirmationPage = () => {
         <p>The UPC code of the product you scanned was {detectedBarcode}<br></br>We identified this product as {ingredientName}</p>
       </div>
       <div className="flex justify-center">
-          <TextButton text="Yes, add ingredient" onClick={addIngredient} route="/ingredients-list"></TextButton>
+        <TextButton text="Yes, add ingredient" onClick={addIngredient} route="/ingredients-list"></TextButton>
       </div>
       <div className="flex justify-center">
         <TextButton text="No, this is actually..." onClick={affirmIngredient} route="/ingredients-list"></TextButton>

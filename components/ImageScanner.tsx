@@ -50,36 +50,37 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       context?.drawImage(video, 0, 0, canvas.width, canvas.height)
 
       const dataURL = canvas.toDataURL()
-      if(onDataCapture) {
+      if (onDataCapture) {
         onDataCapture(dataURL)
       }
       setImage(dataURL)
       setIngredientName('unidentified')
+      console.log("THE BUCK STARTS HERE: ", dataURL)
       fetchData(dataURL.split(';base64,')[1])
     }
   }
 
   const fetchData = async (dataURL: string) => {
     const response = await fetch(
-        '/api/identify_image',
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                data: dataURL,
-            })
-        }
+      '/api/identify_image',
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: dataURL,
+        })
+      }
     );
 
     try {
-        const responseBody = await response.text();
+      const responseBody = await response.text();
 
-        const data = JSON.parse(responseBody);
-        console.log('Response:', data);
+      const data = JSON.parse(responseBody);
+      console.log('Response:', data);
     } catch (error: any) {
-        console.error('Error:', error.message);
+      console.error('Error:', error.message);
     }
   };
 
