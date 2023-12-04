@@ -33,9 +33,8 @@ const RecipeSuggestionPage = () => {
   const [newItem, setNewItem] = useState<Recipe>()
   const [recipes, setRecipes] = useState<Recipe[]>([])
 
-  // useEffect(() => {
-  //   loadRecipes()
-  // }), [recipes]
+  useEffect(() => {
+  }), [recipes]
   const loadRecipes = async() => {
     for(let i=0; i < recipe_id0.length; i++) {
       const newItemVal = await fetchData(recipe_id0[i])
@@ -60,11 +59,11 @@ const RecipeSuggestionPage = () => {
           sugar: newItemVal.sugar.N,
         }
         console.log(recipe)
-        recipes.push(recipe)
-        // setRecipes0((prevRecipes) => [...prevRecipes, recipe]);
+        // recipes.push(recipe)
+        setRecipes((prevRecipes) => [...prevRecipes, recipe]);
       }
     }
-    setRecipes(recipes)
+    // setRecipes(recipes)
   }
   const fetchData = async (recipeID: number) => {
     const response = await fetch(
