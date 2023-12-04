@@ -55,13 +55,14 @@ const IngredientConfirmationPage = () => {
   }
   
   const fetchData = async () => {
-    
-    const response = await fetch(
+    if(detectedBarcode){
+      const id = parseInt(detectedBarcode, 10)
+      const response = await fetch(
         '/api/submit_upc',
         {
             method: "PUT",
             body: JSON.stringify({
-                upc_id: detectedBarcode,
+                upc_id: id,
                 ingredient: ingredientName,
             })
         }
@@ -75,6 +76,11 @@ const IngredientConfirmationPage = () => {
     } catch (error: any) {
         console.error('Error:', error.message);
     }
+    }
+    else {
+      return
+    }
+    
 };
 
   return (

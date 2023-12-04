@@ -15,7 +15,7 @@ export const GET = async(request: NextRequest) => {
     
     let itemData: GetItemCommandOutput;
     itemData = await readItem("UPC", "UPC", "N", upc_ID);
-    // console.log("DATA: ", itemData);
+    console.log("DATA: ", itemData);
     
     if (!itemData.Item) {
       const edamamData = await fetch(
