@@ -1,11 +1,8 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react'
 import TextButton from './buttons/TextButton';
-import { useRouter } from 'next/navigation';
 import { useImage } from './ImageContext'
 import { useBarcode } from './BarcodeContext';
-import Quagga from 'quagga'
-import configureQuagga from '@/quaggaConfig'
 
 interface CapturedImage {
   dataURL: string | null
@@ -16,28 +13,12 @@ interface ScannerProps {
 }
 
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
-  const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [capturedImage, setCapturedImage] = useState<CapturedImage>({ dataURL: null })
-  const { detectedBarcode, setDetectedBarcode } = useBarcode()
   const { setImage } = useImage();
-
+  const { setIngredientName } = useBarcode()
   useEffect(() => {
-    configureQuagga(Quagga)
     getVideo()
-
-    return () => {
-      Quagga.stop()
-    }
   }, [])
-  useEffect(() => {
-    // Update your component state when a barcode is detected
-    Quagga.onDetected((result) => {
-      setDetectedBarcode(result.codeResult.code);
-      takeImage()
-      router.push(`/ingredient-confirmation`);
-    });
-  }, [router]);
 
   const getVideo = () => {
     navigator.mediaDevices
@@ -68,21 +49,46 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       const context = canvas.getContext("2d")
       context?.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-      const dataURL = canvas.toDataURL('image/jpeg')
-      // setCapturedImage({ dataURL })
-      if(onDataCapture) {
+      const dataURL = canvas.toDataURL()
+      if (onDataCapture) {
         onDataCapture(dataURL)
       }
       setImage(dataURL)
+      setIngredientName('unidentified')
+      console.log("THE BUCK STARTS HERE: ", dataURL)
+      fetchData(dataURL.split(';base64,')[1])
     }
-
   }
 
+  const fetchData = async (dataURL: string) => {
+    const response = await fetch(
+      '/api/identify_image',
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: dataURL,
+        })
+      }
+    );
+
+    try {
+      const responseBody = await response.text();
+
+      const data = JSON.parse(responseBody);
+      console.log('Response:', data);
+    } catch (error: any) {
+      console.error('Error:', error.message);
+    }
+  };
+
   return (
-    <div id="barcode-scanner">
-      <video id="barcode-scanner" ref={videoRef}></video>
+    <div id="image-scanner">
+      <video id="image-scanner" ref={videoRef}></video>
       <div className="flex justify-center">
-        {/* <TextButton className="" text="Scan Ingredient" onClick={takeImage} route="/ingredient-confirmation"></TextButton> */}
+        <TextButton className="" text="Identify Ingredient" onClick={takeImage} route="/image-ingredient-confirmation"></TextButton>
       </div>
     </div>
   )

@@ -20,7 +20,7 @@ const IngredientCard: React.FC<IngredientCardProps> = ({ id, src, alt, label, on
           alt={alt}
       />
       <div className="absolute inset-0 flex flex-col justify-start p-2">
-        <div className="flex justify-center">
+        <div className="flex bg-primary rounded-lg justify-center">
           <label className="text-white">{label}</label> 
         </div>
         <div className="absolute bottom-0 right-0 p-1 w-auto h-auto">

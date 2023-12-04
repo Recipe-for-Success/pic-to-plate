@@ -22,7 +22,7 @@ const configureQuagga = (quaggaInstance: typeof Quagga) => {
         decoder: {
           readers: ['ean_reader', 'upc_reader'],
         },
-        frequency: 1,
+        frequency: 0.25,
       },
       (err) => {
         if (err) {

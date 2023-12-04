@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import Scanner from '../../../components/Scanner'
+import BarcodeScanner from '../../../components/BarcodeScanner'
 
 //This page is responsible for displaying interface for scanning barcodes.
 //It will scan the video feed and show a notification to the user when the UPC is confirmed from the video feed.
@@ -13,7 +13,7 @@ const BarcodeScanPage = () => {
       <div className="flex m-5 justify-center text-center text-3xl font-bold">Scan Barcode</div>
       
       <div className="flex justify-center">
-        <Scanner></Scanner>
+        <BarcodeScanner></BarcodeScanner>
       </div>
     </>
   )

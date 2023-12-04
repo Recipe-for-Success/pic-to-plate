@@ -1,6 +1,14 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
+To Access the AWS services in local development:
+1. Go to Programmatic Access on AWS Website after logging in through invitation link portal
+2. Open new terminal and change directory to project folder
+3. Set environment variables: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN
+4. Run aws configure sso-session and enter session name, start URL, region, and registration scopes
+5. Run aws sso login --sso-session session_name
+6. Allow access through browser popup permission window.
+7. Run npm run dev in the console
 
 First, run the development server:
 

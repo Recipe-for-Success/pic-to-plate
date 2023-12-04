@@ -9,20 +9,35 @@ export const POST = async (request: NextRequest) => {
     const requestBody = await request.text();
     const imageData: ImageBase64 = JSON.parse(requestBody);
 
-    console.log("Here1: ", imageData, imageData.data);
+    // console.log("Here1: ", imageData, imageData.data);
+
+    console.log("I'm here!");
 
     const formData = new URLSearchParams({
       image: imageData.data,
     });
-
-    console.log(formData.toString());
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    // console.log("FORMDATA1:", formData.toString().split("image=")[0]);
+    console.log("----------------------------------------");
+    // console.log("FORMDATA2:", formData.toString().split("image=")[1]);
+    console.log("----------------------------------------");
+    // console.log("FORMDATA3:", formData.toString());
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
+    console.log("----------------------------------------");
 
     const imageResponse = await fetch('http://localhost:8000/recognize_image', {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: formData.toString(),
+      body: JSON.stringify({data: formData.toString().split("image=")[1]}),
     });
 
     if (imageResponse.ok) {
@@ -41,7 +56,7 @@ export const POST = async (request: NextRequest) => {
       return response;
     } else {
       console.error('Error:', imageResponse.statusText);
-      return new Response(JSON.stringify({ image: "null!" }), {
+      return new Response(JSON.stringify({ image: "null1111!" }), {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
