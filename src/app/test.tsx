@@ -2,6 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
+
+type RecipeData = {
+    ID: number;
+}
+
+type IngredientData = {
+    ID: string;
+}
 type UPCData = {
     UPC: {
         N: number
@@ -12,14 +20,6 @@ type UPCData = {
     productName: {
         S: String
     }
-}
-
-type RecipeData = {
-    ID: number;
-}
-
-type IngredientData = {
-    ID: string;
 }
 
 const IdentifyUPC = () => {

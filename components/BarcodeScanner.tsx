@@ -15,13 +15,13 @@ interface ScannerProps {
   onDataCapture?: (dataURL: string) => void
 }
 
+
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null)
   const [capturedImage, setCapturedImage] = useState<CapturedImage>({ dataURL: null })
-  const { detectedBarcode, setDetectedBarcode } = useBarcode()
+  const { detectedBarcode, setIngredientName, setDetectedBarcode } = useBarcode()
   const { setImage } = useImage();
-
   useEffect(() => {
     configureQuagga(Quagga)
     getVideo()
@@ -35,7 +35,6 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     Quagga.onDetected((result) => {
       setDetectedBarcode(result.codeResult.code);
       takeImage()
-      router.push(`/ingredient-confirmation`);
     });
   }, [router]);
 
@@ -78,11 +77,35 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
   }
 
+  const fetchData = async (detectedBarcode: string | null) => {
+    console.log(detectedBarcode)
+    const response = await fetch(
+      
+        `/api/identify_upc?upc_id=` + detectedBarcode,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    try {
+        const responseBody = await response.text();
+
+        const data = JSON.parse(responseBody);
+        console.log('Response:', data);
+        setIngredientName(data.data.ingredient)
+    } catch (error: any) {
+        console.error('Error:', error.message);
+    }
+  };
+
   return (
     <div id="barcode-scanner">
       <video id="barcode-scanner" ref={videoRef}></video>
       <div className="flex justify-center">
-        {/* <TextButton className="" text="Scan Ingredient" onClick={takeImage} route="/ingredient-confirmation"></TextButton> */}
+        <TextButton className="" text="Scan Ingredient" onClick={() => fetchData(detectedBarcode)} disabled={detectedBarcode === null} route='/ingredient-confirmation'></TextButton>
       </div>
     </div>
   )

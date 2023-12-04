@@ -14,7 +14,7 @@ import { useBarcode } from '../../../components/BarcodeContext'
 const IngredientConfirmationPage = () => {
   const { setIngredients } = useIngredients()
   const { image } = useImage()
-  const { detectedBarcode, ingredientName, setDetectedBarcode, setIngredientName } = useBarcode()
+  const { ingredientName, setIngredientName } = useBarcode()
   const textRef = useRef<HTMLInputElement>(null)
   const id = Math.random().toString(36).substring(7)
   const handleAddIngredient = (newIngredient: { id: string; src: any; alt: string; label: string }) => {
@@ -30,9 +30,7 @@ const IngredientConfirmationPage = () => {
         label: ingredientName
     }
     handleAddIngredient(newIngredient)
-    //submit upc
     // fetchData()
-    setDetectedBarcode(null)
   }
 
   const affirmIngredient = () => {
@@ -49,33 +47,8 @@ const IngredientConfirmationPage = () => {
       handleAddIngredient(newIngredient)
       setIngredientName(input)
     }
-    //submit upc with input
     // fetchData()
-    setDetectedBarcode(null)
   }
-  
-  const fetchData = async () => {
-    
-    const response = await fetch(
-        '/api/submit_upc',
-        {
-            method: "PUT",
-            body: JSON.stringify({
-                upc_id: detectedBarcode,
-                ingredient: ingredientName,
-            })
-        }
-    );
-
-    try {
-        const responseBody = await response.text();
-
-        const data = JSON.parse(responseBody);
-        console.log('Response:', data);
-    } catch (error: any) {
-        console.error('Error:', error.message);
-    }
-};
 
   return (
     <>
@@ -84,7 +57,7 @@ const IngredientConfirmationPage = () => {
         {image && <Image src={image} width={540} height={540} alt="Captured Image"></Image>}
       </div>
       <div className="flex justify-center text-center">
-        <p>The UPC code of the product you scanned was {detectedBarcode}<br></br>We identified this product as {ingredientName}</p>
+        <p>We identified your ingredient as {ingredientName}</p>
       </div>
       <div className="flex justify-center">
           <TextButton text="Yes, add ingredient" onClick={addIngredient} route="/ingredients-list"></TextButton>

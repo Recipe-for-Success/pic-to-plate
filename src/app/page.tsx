@@ -8,7 +8,7 @@ import IdentifyImage from './test'
 export default function Home() {
   return (
     <main className="flex flex-col">
-      <SuggestRecipes />
+      {/* <SuggestRecipes /> */}
       <h1 className="flex justify-center text-3xl bg-primary p-2 mx-auto w-full"> Website Interfaces</h1>
       <div className="flex flex-col p-1 m-2">
         <div className="flex justify-center">
