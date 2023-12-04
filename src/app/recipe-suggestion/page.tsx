@@ -32,10 +32,14 @@ const RecipeSuggestionPage = () => {
   const { recipe_id0, recipe_id1, recipe_id2, recipes0, recipes1, recipes2, setRecipes0, setRecipes1, setRecipes2 } = useRecipes()
   const [newItem, setNewItem] = useState<Recipe>()
   const [recipes, setRecipes] = useState<Recipe[]>([])
-
+  const [recipesLoaded, setRecipesLoaded] = useState(false)
+  let recipeIndex = 0
   useEffect(() => {
   }), [recipes]
   const loadRecipes = async() => {
+    if(recipesLoaded){
+      return
+    }
     for(let i=0; i < recipe_id0.length; i++) {
       const newItemVal = await fetchData(recipe_id0[i])
       if(newItemVal) {
@@ -61,6 +65,7 @@ const RecipeSuggestionPage = () => {
         console.log(recipe)
         // recipes.push(recipe)
         setRecipes((prevRecipes) => [...prevRecipes, recipe]);
+        setRecipesLoaded(true)
       }
     }
     // setRecipes(recipes)
@@ -96,7 +101,7 @@ const RecipeSuggestionPage = () => {
       <div className="flex m-2 p-2 flex-col mx-auto max-w-[400px] bg-primary rounded-md shadow-lg">
         <ul className="">
           {ingredients && ingredients.map((ingredient) => (
-            <li>{ingredient.label}</li>
+            <li key={ingredient.id}>{ingredient.label}</li>
           ))}
         </ul>
       </div>
@@ -118,7 +123,7 @@ const RecipeSuggestionPage = () => {
       ))}
       <div className="flex justify-center">
         {/* Back to Recipes Button  */}
-        <TextButton text="Load Ingredients" onClick={loadRecipes}></TextButton>
+        <TextButton text="Load Recipes" onClick={loadRecipes}></TextButton>
       </div>
       <div className="flex justify-center">
         {/* Back to Recipes Button  */}
