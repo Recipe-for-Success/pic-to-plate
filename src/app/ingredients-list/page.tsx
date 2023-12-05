@@ -14,7 +14,7 @@ import { useRecipes } from '../../../components/RecipeContext'
 //Output: Current list of ingredients
 const IngredientsListPage = () => {
   const { ingredients, setIngredients } = useIngredients()
-  const { setRecipe_id0, setRecipe_id1, setRecipe_id2 } = useRecipes()
+  const { setRecipe_id0, setRecipe_id1, setRecipe_id2, setRecipes0, setRecipes1, setRecipes2 } = useRecipes()
 
   const handleDeleteIngredient = (id: string) => {
     setIngredients((prevIngredients) => prevIngredients.filter((ingredient) => ingredient.id !== id));
@@ -25,6 +25,9 @@ const IngredientsListPage = () => {
       .map((ingredient) => `&ID=${ingredient.label}`)
       .join("");
       console.log(queryString)
+      setRecipes0([])
+      setRecipes1([])
+      setRecipes2([])
     const response = await fetch(
         `/api/suggest_recipes?` + queryString,
         {
@@ -44,7 +47,7 @@ const IngredientsListPage = () => {
         setRecipe_id0(data.data[0])
         setRecipe_id1(data.data[1])
         setRecipe_id2(data.data[2])
-
+        
     } catch (error: any) {
         console.error('Error:', error.message);
     }
