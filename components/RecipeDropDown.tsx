@@ -27,10 +27,11 @@ interface Recipe {
 interface RecipeDropdownProps {
     recipes: Recipe[];
     numMissing: string
+    recipesRemaining: number
     loadRecipes: () => void
 }
 
-const RecipeDropdown: React.FC<RecipeDropdownProps> = ({ recipes, numMissing, loadRecipes}) => {
+const RecipeDropdown: React.FC<RecipeDropdownProps> = ({ recipes, numMissing, recipesRemaining, loadRecipes}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { recipes0, recipes1, recipes2 } = useRecipes()
     
@@ -38,8 +39,10 @@ const RecipeDropdown: React.FC<RecipeDropdownProps> = ({ recipes, numMissing, lo
 
     }), [recipes0, recipes1, recipes2]
     const toggleDropdown = () => {
+        if(!isOpen && recipesRemaining > 0) {
+            loadRecipes()
+        }
         setIsOpen(!isOpen);
-        loadRecipes()
     };
 
     return (

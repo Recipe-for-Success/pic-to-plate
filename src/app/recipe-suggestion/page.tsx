@@ -204,9 +204,9 @@ const RecipeSuggestionPage = () => {
       {/* Recipes List  */}
       <div className="flex m-3 justify-center text-center text-3xl font-bold">Recipes:</div>
       
-      <RecipeDropdown recipes={recipes0} numMissing='No' loadRecipes={loadRecipes0}></RecipeDropdown>
-      <RecipeDropdown recipes={recipes1} numMissing='One' loadRecipes={loadRecipes1}></RecipeDropdown>
-      <RecipeDropdown recipes={recipes2} numMissing='Two' loadRecipes={loadRecipes2}></RecipeDropdown>
+      <RecipeDropdown recipes={recipes0} numMissing='No' loadRecipes={loadRecipes0} recipesRemaining={(recipe_id0.length - loadedRecipeCount0)}></RecipeDropdown>
+      <RecipeDropdown recipes={recipes1} numMissing='One' loadRecipes={loadRecipes1} recipesRemaining={(recipe_id1.length - loadedRecipeCount1)}></RecipeDropdown>
+      <RecipeDropdown recipes={recipes2} numMissing='Two' loadRecipes={loadRecipes2} recipesRemaining={(recipe_id2.length - loadedRecipeCount2)}></RecipeDropdown>
 
       {/* Load Recipes  */}
       {/* <div className="flex justify-center">
