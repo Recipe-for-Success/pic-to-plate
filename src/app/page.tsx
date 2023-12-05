@@ -1,10 +1,4 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import IdentifyUPC from './test'
-import SuggestRecipes from './test'
-import SubmitUPC from './test'
-import IdentifyImage from './test'
-import { Button } from 'flowbite-react'
+
 import TextButton from '../../components/buttons/TextButton'
 
 export default function Home() {
