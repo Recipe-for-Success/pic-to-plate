@@ -79,6 +79,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
       const data = JSON.parse(responseBody);
       console.log('Response:', data);
+      setIngredientName(data.ingredient);
     } catch (error: any) {
       console.error('Error:', error.message);
     }
