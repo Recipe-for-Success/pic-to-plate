@@ -35,13 +35,11 @@ const IngredientConfirmationPage = () => {
     setDetectedBarcode(null)
   }
 
-  console.log("WHY NOT: ", ingredientName);
-
   const affirmIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
     if (textRef.current) {
       const input = textRef.current.value
-      console.log(input)
+
       const newIngredient = {
         id: convertedID.toString(36),
         src: image,
@@ -52,12 +50,10 @@ const IngredientConfirmationPage = () => {
       setIngredientName(input)
       fetchData(input)
     }
-    //submit upc with input
 
+    //submit upc with input
     setDetectedBarcode(null)
   }
-
-  console.log(ingredientName, "is itnow!");
 
   const fetchData = async (ingredient: string) => {
     if (detectedBarcode && ingredient) {
@@ -75,17 +71,13 @@ const IngredientConfirmationPage = () => {
 
       try {
         const responseBody = await response.text();
-
         const data = JSON.parse(responseBody);
-        console.log('Wacky:', data);
       } catch (error: any) {
         console.error('Error:', error.message);
       }
-    }
-    else {
+    } else {
       return
     }
-
   };
 
   return (

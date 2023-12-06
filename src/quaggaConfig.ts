@@ -32,12 +32,9 @@ const configureQuagga = (quaggaInstance: typeof Quagga) => {
         quaggaInstance.start();
   
         quaggaInstance.onDetected((result) => {
-          console.log('Barcode detected:', result.codeResult.code);
-          // Handle the detected barcode here
         });
   
         quaggaInstance.onProcessed((result) => {
-          // Your processing logic here
         });
       }
     );
