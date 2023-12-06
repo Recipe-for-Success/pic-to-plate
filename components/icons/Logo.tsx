@@ -9,7 +9,8 @@ const Logo = () => {
             src={logo}
             alt="Home"
             width={45}
-            height={45} />
+            height={45}
+        />
 
     )
 }

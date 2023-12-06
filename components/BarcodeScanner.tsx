@@ -15,7 +15,6 @@ interface ScannerProps {
   onDataCapture?: (dataURL: string) => void
 }
 
-
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -64,7 +63,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     if (video && !done) {
       done = true;
       const canvas = document.createElement('canvas')
-      console.log("Taking a photo. Say cheese!")
+
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
       const context = canvas.getContext("2d")
@@ -81,10 +80,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
   }
 
   const fetchData = async (detectedBarcode: string | null,) => {
-
-    console.log("blue!", detectedBarcode)
     const response = await fetch(
-
       `/api/identify_upc?upc_id=` + detectedBarcode,
       {
         method: "GET",
@@ -96,19 +92,13 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
     try {
       const responseBody = await response.text();
-
       const data = JSON.parse(responseBody);
-      console.log('Response:', data);
 
       if (data.data.ingredient) {
         setIngredientName(data.data.ingredient);
       } else if (data.data.Item) {
         setIngredientName(data.data.Item.ingredient.S);
-        // console.log(data.data.Item.ingredient.S, "HERE IT COMES!!!");
       }
-
-
-      // console.log(ingredientName, "is the test!");
     } catch (error: any) {
       console.error('Error:', error.message);
     }
