@@ -7,15 +7,13 @@ export const GET = async(request: NextRequest) => {
     let upc_ID: number;
 
     if (upc_string) {
-      // console.log("This is the beginning of the Identify_UPC Get Request " + upc_string)
       upc_ID = +upc_string;
     } else {
-      throw new Error("WHY???");
+      throw new Error("Request missing or invalid");
     }
     
     let itemData: GetItemCommandOutput;
     itemData = await readItem("UPC", "UPC", "N", upc_ID);
-    console.log("DATA: ", itemData);
     
     if (!itemData.Item) {
       const edamamData = await fetch(
@@ -31,8 +29,7 @@ export const GET = async(request: NextRequest) => {
       try {
         const responseBody = await edamamData.text();
         const data = JSON.parse(responseBody);
-        console.log("Edamam Data: ")
-        console.log(data)
+
         if (!data.hints) {
           let errorString: string = "No item with that UPC found!";
 
@@ -45,9 +42,7 @@ export const GET = async(request: NextRequest) => {
 
           return response1;
         } else {
-          // console.log("true");
           let longIngredient: string = data.hints[0].food.knownAs.split(',')[0];
-          console.log('Response2:', longIngredient);
 
           const shortIngredientData = await fetch(
             `http://localhost:8000/normalize_ingredient?raw_product=` + longIngredient,
@@ -62,8 +57,6 @@ export const GET = async(request: NextRequest) => {
           const shortIngredient = await shortIngredientData.text();
           let shortName = JSON.parse(shortIngredient);
 
-          console.log("Here I am: ", shortName);
-
           if (!shortName.ingredient) {
             let errorString: string = "No matching ingredient in database!";
 
@@ -76,7 +69,7 @@ export const GET = async(request: NextRequest) => {
 
             return response2;
           }
-          //For final demo, change to data: shortIngredient with nlp model running on port 8000
+          
           let response3 = new Response(JSON.stringify({data: shortName}), {
             status: 200,
             headers: {

@@ -9,7 +9,7 @@ export const GET = async(request: NextRequest) => {
     if (recipe_string) {
       recipe_ID = +recipe_string;
     } else {
-      throw new Error("WHY???");
+      throw new Error("Request missing or invalid");
     }
 
     let recipeData: GetItemCommandOutput
