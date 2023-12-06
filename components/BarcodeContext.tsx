@@ -10,9 +10,11 @@ interface BarcodeContextProps {
   newItem: UPCData | null
   setNewItem: React.Dispatch<React.SetStateAction<UPCData | null>>
 }
+
 interface BarcodeProviderProps {
   children: ReactNode;
 }
+
 type UPCData = {
   UPC: {
     N: number
