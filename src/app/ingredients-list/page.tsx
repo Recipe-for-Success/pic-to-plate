@@ -24,32 +24,30 @@ const IngredientsListPage = () => {
     const queryString: string = ingredients
       .map((ingredient) => `&ID=${ingredient.label}`)
       .join("");
-      console.log(queryString)
-      setRecipes0([])
-      setRecipes1([])
-      setRecipes2([])
+
+    setRecipes0([])
+    setRecipes1([])
+    setRecipes2([])
     const response = await fetch(
-        `/api/suggest_recipes?` + queryString,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }
+      `/api/suggest_recipes?` + queryString,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
 
     try {
-        const responseBody = await response.text();
+      const responseBody = await response.text();
+      const data = JSON.parse(responseBody);
+      //Use data to get Recipes
+      setRecipe_id0(data.data[0])
+      setRecipe_id1(data.data[1])
+      setRecipe_id2(data.data[2])
 
-        const data = JSON.parse(responseBody);
-        console.log('Response!!!!:', data.data[0]);
-        //Use data to get Recipes
-        setRecipe_id0(data.data[0])
-        setRecipe_id1(data.data[1])
-        setRecipe_id2(data.data[2])
-        
     } catch (error: any) {
-        console.error('Error:', error.message);
+      console.error('Error:', error.message);
     }
   };
 
@@ -57,12 +55,12 @@ const IngredientsListPage = () => {
     <>
       <div>
         <div className="flex justify-center text-center text-3xl font-bold">Add Ingredients</div>
-        
+
         <div className="flex flex-col p-2 justify-center">
           <div className="flex p-1 justify-center"><IconTextButton text="Scan Barcode" route="/barcode-scan"><Video></Video></IconTextButton></div>
           <div className="flex p-1 justify-center"><IconTextButton text="Take Picture" route="/photo-scan"><Camera></Camera></IconTextButton></div>
         </div>
-        
+
         <div className="rounded-lg max-w-[50%] mx-auto bg-primary">
           <div className="text-center bg-secondary text-2xl rounded-t-lg">Identified Ingredients</div>
           <div className="grid max-h-[300px] p-2  mx-auto justify-items-center overflow-y-scroll">
@@ -75,7 +73,7 @@ const IngredientsListPage = () => {
         </div>
       </div>
     </>
-    
+
   )
 }
 

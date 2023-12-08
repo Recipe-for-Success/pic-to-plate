@@ -41,19 +41,19 @@ const RecipeSuggestionPage = () => {
   const [loadedRecipeCount2, setLoadedRecipeCount2] = useState(0);
   const recipesPerPage = 5;
 
-  const loadRecipes0 = async() => {
+  const loadRecipes0 = async () => {
     const startIndex = loadedRecipeCount0;
     const endIndex = startIndex + recipesPerPage;
-    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id0.length-startIndex) + "\n" + recipes0Loaded)
-    if(recipes0Loaded){
+
+    if (recipes0Loaded) {
       return
     }
 
     //Recipes with no missing ingredients
-    for(let i=startIndex; i < endIndex && i < recipe_id0.length; i++) {
+    for (let i = startIndex; i < endIndex && i < recipe_id0.length; i++) {
       const newItemVal = await fetchData(recipe_id0[i])
-      if(newItemVal) {
-        
+      if (newItemVal) {
+
         const recipe: Recipe = {
           ID: newItemVal.ID.N,
           author: newItemVal.author.S,
@@ -72,29 +72,28 @@ const RecipeSuggestionPage = () => {
           steps: newItemVal.steps.L,
           sugar: newItemVal.sugar.N,
         }
-        console.log(recipe)
-        // recipes.push(recipe)
+
         setRecipes0((prevRecipes) => [...prevRecipes, recipe]);
         setLoadedRecipeCount0((prevCount) => prevCount + 1);
       }
     }
-    if(loadedRecipeCount0 >= recipe_id0.length){
+    if (loadedRecipeCount0 >= recipe_id0.length) {
       setRecipes0Loaded(true)
     }
   }
 
-  const loadRecipes1 = async() => {
+  const loadRecipes1 = async () => {
     const startIndex = loadedRecipeCount1;
     const endIndex = startIndex + recipesPerPage;
-    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id1.length-startIndex) + "\n" + recipes1Loaded)
-    if(recipes1Loaded){
+    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id1.length - startIndex) + "\n" + recipes1Loaded)
+    if (recipes1Loaded) {
       return
     }
     //Recipes with one missing ingredient
-    for(let i=startIndex; i < endIndex && i < recipe_id1.length; i++) {
+    for (let i = startIndex; i < endIndex && i < recipe_id1.length; i++) {
       const newItemVal = await fetchData(recipe_id1[i])
-      if(newItemVal) {
-        
+      if (newItemVal) {
+
         const recipe: Recipe = {
           ID: newItemVal.ID.N,
           author: newItemVal.author.S,
@@ -119,24 +118,24 @@ const RecipeSuggestionPage = () => {
         setLoadedRecipeCount1((prevCount) => prevCount + 1);
       }
     }
-    if(loadedRecipeCount1 >= recipe_id1.length){
+    if (loadedRecipeCount1 >= recipe_id1.length) {
       setRecipes1Loaded(true)
     }
   }
 
-  const loadRecipes2 = async() => {
+  const loadRecipes2 = async () => {
     const startIndex = loadedRecipeCount2;
     const endIndex = startIndex + recipesPerPage;
-    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id2.length-startIndex) + "\n" + recipes2Loaded)
-    if(recipes2Loaded){
+    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id2.length - startIndex) + "\n" + recipes2Loaded)
+    if (recipes2Loaded) {
       return
     }
 
     //Recipes with two missing ingredients
-    for(let i=startIndex; i < endIndex && i < recipe_id2.length; i++) {
+    for (let i = startIndex; i < endIndex && i < recipe_id2.length; i++) {
       const newItemVal = await fetchData(recipe_id2[i])
-      if(newItemVal) {
-        
+      if (newItemVal) {
+
         const recipe: Recipe = {
           ID: newItemVal.ID.N,
           author: newItemVal.author.S,
@@ -161,7 +160,7 @@ const RecipeSuggestionPage = () => {
         setLoadedRecipeCount2((prevCount) => prevCount + 1);
       }
     }
-    if(loadedRecipeCount2 >= recipe_id2.length){
+    if (loadedRecipeCount2 >= recipe_id2.length) {
       setRecipes2Loaded(true)
     }
   }
@@ -181,7 +180,7 @@ const RecipeSuggestionPage = () => {
       const responseBody = await response.text();
 
       const data = JSON.parse(responseBody);
-      // console.log('Response:', data);
+
       const newItemVal: Recipe = data.data.Item;
 
       return newItemVal;
@@ -203,7 +202,7 @@ const RecipeSuggestionPage = () => {
       </div>
       {/* Recipes List  */}
       <div className="flex m-3 justify-center text-center text-3xl font-bold">Recipes:</div>
-      
+
       <RecipeDropdown recipes={recipes0} numMissing='No' loadRecipes={loadRecipes0} recipesRemaining={(recipe_id0.length - loadedRecipeCount0)}></RecipeDropdown>
       <RecipeDropdown recipes={recipes1} numMissing='One' loadRecipes={loadRecipes1} recipesRemaining={(recipe_id1.length - loadedRecipeCount1)}></RecipeDropdown>
       <RecipeDropdown recipes={recipes2} numMissing='Two' loadRecipes={loadRecipes2} recipesRemaining={(recipe_id2.length - loadedRecipeCount2)}></RecipeDropdown>

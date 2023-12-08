@@ -43,7 +43,6 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     const video = videoRef.current
     if (video) {
       const canvas = document.createElement('canvas')
-      console.log("Taking a photo. Say cheese!")
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
       const context = canvas.getContext("2d")
@@ -55,7 +54,6 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       }
       setImage(dataURL)
       setIngredientName('unidentified')
-      console.log("THE BUCK STARTS HERE: ", dataURL)
       fetchData(dataURL.split(';base64,')[1])
     }
   }
@@ -76,9 +74,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
     try {
       const responseBody = await response.text();
-
       const data = JSON.parse(responseBody);
-      console.log('Response:', data);
       setIngredientName(data.ingredient);
     } catch (error: any) {
       console.error('Error:', error.message);

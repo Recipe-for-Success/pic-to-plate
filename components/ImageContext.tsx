@@ -6,9 +6,11 @@ interface ImageContextProps {
   image: string | null;
   setImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
+
 interface ImageProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
+
 const ImageContext = createContext<ImageContextProps | undefined>(undefined);
 
 export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {

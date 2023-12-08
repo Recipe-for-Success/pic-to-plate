@@ -5,22 +5,6 @@ const convertToAttributeValue = (value: string | number): AttributeValue => {
   return typeof value === "number" ? { N: value.toString() } : { S: value };
 };
 
-export const createItem = async () => {
-    const command = new PutItemCommand({
-        TableName: "EspressoDrinks",  
-        Item: {
-            DrinkName: { S: "Coffee" },
-            Variants: { SS: ["Latte", "Mocha"]},
-            isTasty: {BOOL: true},
-        },
-    });
-
-    const response = dbclient.send(command);
-
-    return response;
-}
-
-
 export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: number | string) => {
     const key: Record<string, AttributeValue> = {};
     key[keyName] = convertToAttributeValue(keyValue);
@@ -31,7 +15,7 @@ export const readItem = async (tableName: string, keyName: string, keyType: stri
     });
 
     const response = await dbclient.send(command);
-    // console.log(response);
+
     return response;
 }
 
@@ -73,9 +57,6 @@ export const readBatch = async(tableName: string, keyName: string, keyType: stri
         response?.Responses?.[tableName].push(...(response2?.Responses?.[tableName]?? []));  
     }
 
-    // const response = await dbclient.send(command);
-    // console.log("REP: ", response);
-    // console.log("REP2: ", response?.Responses?.[tableName]);
     return response;
 }
 
@@ -110,8 +91,6 @@ export const deleteItem = async (tableName: string, keyName: string, keyType: st
     return response;
 }
 
-
-
-const utils = {createItem, readItem, updateItem, deleteItem};
+const utils = {readItem, updateItem, deleteItem};
 
 export default utils;
