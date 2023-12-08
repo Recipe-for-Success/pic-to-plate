@@ -20,7 +20,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null)
   const [capturedImage, setCapturedImage] = useState<CapturedImage>({ dataURL: null })
-  const { detectedBarcode, setIngredientName, setDetectedBarcode } = useBarcode()
+  const { detectedBarcode, setIdentified, setIngredientName, setDetectedBarcode } = useBarcode()
   const { setImage } = useImage();
   useEffect(() => {
     configureQuagga(Quagga)
@@ -95,16 +95,23 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     );
 
     try {
+      if(!response.ok) {
+        console.log("didnt find")
+        setIdentified(false)
+      }
       const responseBody = await response.text();
-
       const data = JSON.parse(responseBody);
       console.log('Response:', data);
 
       if (data.data.ingredient) {
         setIngredientName(data.data.ingredient);
+        setIdentified(true)
       } else if (data.data.Item) {
         setIngredientName(data.data.Item.ingredient.S);
+        setIdentified(true)
         // console.log(data.data.Item.ingredient.S, "HERE IT COMES!!!");
+      } else {
+        setIdentified(false)
       }
 
 
@@ -116,9 +123,16 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
   return (
     <div id="barcode-scanner">
-      <video id="barcode-scanner" ref={videoRef}></video>
+      
+      <video id="barcode-scanner" ref={videoRef}>
+        {detectedBarcode && (
+          <div>
+            <p className="text-white">{detectedBarcode}</p>
+          </div>
+        )}
+      </video>
       <div className="flex justify-center">
-        <TextButton className="" text="Scan Ingredient" onClick={() => fetchData(detectedBarcode)} disabled={detectedBarcode === null} route='/ingredient-confirmation'></TextButton>
+        <TextButton className={detectedBarcode === null ? '' : ''} text={detectedBarcode === null ? "Scan Ingredient" : "Click to Identify: " + detectedBarcode} onClick={() => fetchData(detectedBarcode)} disabled={detectedBarcode === null} route='/ingredient-confirmation'></TextButton>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import Image from 'next/image'
 import TextButton from '../../../components/buttons/TextButton'
 import { useImage } from '../../../components/ImageContext'
@@ -13,13 +13,14 @@ import { useBarcode } from '../../../components/BarcodeContext'
 //Output: New ingredient added to list with image and label
 const IngredientConfirmationPage = () => {
   const { setIngredients } = useIngredients()
-  const { image } = useImage()
-  const { detectedBarcode, ingredientName, setDetectedBarcode, setIngredientName } = useBarcode()
+  const { image, setImage } = useImage()
+  const { detectedBarcode, identified, ingredientName, setDetectedBarcode, setIngredientName } = useBarcode()
   const textRef = useRef<HTMLInputElement>(null)
   const id = Math.random().toString(36).substring(7)
   const handleAddIngredient = (newIngredient: { id: string; src: any; alt: string; label: string }) => {
     setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
   };
+
 
   const addIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
@@ -33,6 +34,8 @@ const IngredientConfirmationPage = () => {
     //submit upc
     fetchData(ingredientName)
     setDetectedBarcode(null)
+    setIngredientName('')
+    setImage(null)
   }
 
   console.log("WHY NOT: ", ingredientName);
@@ -55,6 +58,8 @@ const IngredientConfirmationPage = () => {
     //submit upc with input
 
     setDetectedBarcode(null)
+    setIngredientName('')
+    setImage(null)
   }
 
   console.log(ingredientName, "is itnow!");
@@ -95,7 +100,7 @@ const IngredientConfirmationPage = () => {
         {image && <Image src={image} width={540} height={540} alt="Captured Image"></Image>}
       </div>
       <div className="flex justify-center text-center">
-        <p>The UPC code of the product you scanned was {detectedBarcode}<br></br>We identified this product as {ingredientName}</p>
+        <p>The UPC code of the product you scanned was {detectedBarcode}<br></br> {identified ? ("We identified this product as " + ingredientName + ".") : ("We could not identify your ingredient.")}</p>
       </div>
       <div className="flex justify-center">
         <TextButton text="Yes, add ingredient" onClick={addIngredient} route="/ingredients-list"></TextButton>

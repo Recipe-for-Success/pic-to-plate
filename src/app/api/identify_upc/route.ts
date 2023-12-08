@@ -76,7 +76,6 @@ export const GET = async(request: NextRequest) => {
 
             return response2;
           }
-          //For final demo, change to data: shortIngredient with nlp model running on port 8000
           let response3 = new Response(JSON.stringify({data: shortName}), {
             status: 200,
             headers: {

@@ -35,9 +35,7 @@ const RecipeDropdown: React.FC<RecipeDropdownProps> = ({ recipes, numMissing, re
     const [isOpen, setIsOpen] = useState(false);
     const { recipes0, recipes1, recipes2 } = useRecipes()
     
-    useEffect(() => {
-
-    }), [recipes0, recipes1, recipes2]
+    
     const toggleDropdown = () => {
         if(!isOpen && recipesRemaining > 0) {
             loadRecipes()

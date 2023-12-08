@@ -13,7 +13,7 @@ import { useBarcode } from '../../../components/BarcodeContext'
 //Output: New ingredient added to list with image and label
 const IngredientConfirmationPage = () => {
   const { setIngredients } = useIngredients()
-  const { image } = useImage()
+  const { image, setImage } = useImage()
   const { ingredientName, setIngredientName } = useBarcode()
   const textRef = useRef<HTMLInputElement>(null)
   const id = Math.random().toString(36).substring(7)
@@ -30,6 +30,8 @@ const IngredientConfirmationPage = () => {
         label: ingredientName
     }
     handleAddIngredient(newIngredient)
+    setIngredientName('')
+    setImage(null)
   }
 
   const affirmIngredient = () => {
@@ -44,7 +46,8 @@ const IngredientConfirmationPage = () => {
           label: input
       }
       handleAddIngredient(newIngredient)
-      setIngredientName(input)
+      setIngredientName('')
+      setImage(null)
     }
   }
 
