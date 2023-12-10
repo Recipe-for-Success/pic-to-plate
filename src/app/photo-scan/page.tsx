@@ -7,14 +7,12 @@ import ImageScanner from '../../../components/ImageScanner'
 //Input: Scanner (Captured Image), Buttons
 //Output: Identified Ingredient Name and Captured Image
 const PhotoScanPage = () => {
-  const onDataCapture = () => {
-
-  }
+  //Displays Image Scanner with Page label
   return (
     <>
       <div className="flex m-5 justify-center text-center text-3xl font-bold">Take Picture</div>
       <div className="flex justify-center">
-        <ImageScanner onDataCapture={onDataCapture}></ImageScanner>
+        <ImageScanner></ImageScanner>
       </div>
     </>
   )

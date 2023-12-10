@@ -8,20 +8,28 @@ import { useBarcode } from '../../../components/BarcodeContext'
 
 //This page shows the results from the ingredient identification step.
 //It allows the user to confirm the ingredient, or reject the ingredient and provide a confirmation for the correct ingredient name.
-//It displays the product name, brand name, and the image captured for processing.
+//It displays the product name and the image captured for processing.
 //Input: Captured image, text field for correction, buttons
 //Output: New ingredient added to list with image and label
 const IngredientConfirmationPage = () => {
+  //UseIngredients context to setIngredients list
   const { setIngredients } = useIngredients()
+  //UseImage context to read/set captured image
   const { image, setImage } = useImage()
-  const { detectedBarcode, identified, ingredientName, setDetectedBarcode, setIngredientName } = useBarcode()
+  //UseBarcode context to read/set detected barcode string, identified boolean, and ingredient name
+  const { detectedBarcode, identified, ingredientName, setDetectedBarcode, setIdentified, setIngredientName } = useBarcode()
+  //Reference to input element
   const textRef = useRef<HTMLInputElement>(null)
+  //Randomized number for unique id generation
   const id = Math.random().toString(36).substring(7)
+  
+  //Add ingredient to ingredients list
   const handleAddIngredient = (newIngredient: { id: string; src: any; alt: string; label: string }) => {
     setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
   };
 
 
+  //Add ingredient using ingredientName as label
   const addIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
     const newIngredient = {
@@ -31,13 +39,15 @@ const IngredientConfirmationPage = () => {
       label: ingredientName
     }
     handleAddIngredient(newIngredient)
-    //submit upc
+    //submit upc to database
     fetchData(ingredientName)
     setDetectedBarcode(null)
     setIngredientName('')
     setImage(null)
+    setIdentified(false)
   }
 
+  //Add ingredient using textbox input as label
   const affirmIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
     if (textRef.current) {
@@ -54,12 +64,14 @@ const IngredientConfirmationPage = () => {
       fetchData(input)
     }
 
-    //submit upc with input
+    //submit upc with input to database
     setDetectedBarcode(null)
     setIngredientName('')
     setImage(null)
+    setIdentified(false)
   }
 
+  //Define Submit UPC API call to add UPC and ingredient name to database
   const fetchData = async (ingredient: string) => {
     if (detectedBarcode && ingredient) {
       const id = parseInt(detectedBarcode, 10)
@@ -73,7 +85,9 @@ const IngredientConfirmationPage = () => {
           })
         }
       );
-
+      if(response.status == 400){
+        return
+      }
       try {
         const responseBody = await response.text();
         const data = JSON.parse(responseBody);
@@ -84,7 +98,7 @@ const IngredientConfirmationPage = () => {
       return
     }
   };
-
+  //Displays image captured, text showing identified ingredient, button to add without correction, and a button with text input to add with correction
   return (
     <>
       <div className="flex m-5 justify-center text-center text-3xl font-bold">Is this right?</div>

@@ -7,20 +7,24 @@ import { useBarcode } from './BarcodeContext';
 import Quagga from 'quagga'
 import configureQuagga from '@/quaggaConfig'
 
-interface CapturedImage {
-  dataURL: string | null
-}
 
+//BarcodeScanner interface
 interface ScannerProps {
   onDataCapture?: (dataURL: string) => void
 }
 
+//Barcode Scanner manages displaying video stream from device camera, taking images from video stream, and calling identify_upc API
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
+  //Router for navigation
   const router = useRouter();
+  //Reference to video element
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [capturedImage, setCapturedImage] = useState<CapturedImage>({ dataURL: null })
+  //useBarcode context to read/set detected barcode as well as set ingredient name and identified status
   const { detectedBarcode, setIdentified, setIngredientName, setDetectedBarcode } = useBarcode()
+  //UseImage context to set image for use on next page
   const { setImage } = useImage();
+
+  //UseEffect hook configures quagga for UPC identification and starts video stream from device camera
   useEffect(() => {
     configureQuagga(Quagga)
     getVideo()
@@ -29,14 +33,17 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       Quagga.stop()
     }
   }, [])
+
+  //Update component when a barcode is detected from Quagga
   useEffect(() => {
-    // Update your component state when a barcode is detected
     Quagga.onDetected((result) => {
+      //Set barcode to result and capture image of barcode
       setDetectedBarcode(result.codeResult.code);
       takeImage()
     });
   }, [router]);
 
+  //If video reference is available, set video source to device camera video
   const getVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: { width: 540 } })
@@ -56,8 +63,10 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       })
   }
 
+  //Ensure only one image is captured using done
   let done = false;
 
+  //Capture image from video stream using canvas context
   const takeImage = () => {
     const video = videoRef.current
     if (video && !done) {
@@ -70,7 +79,6 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       context?.drawImage(video, 0, 0, canvas.width, canvas.height)
 
       const dataURL = canvas.toDataURL('image/jpeg')
-      // setCapturedImage({ dataURL })
       if (onDataCapture) {
         onDataCapture(dataURL)
       }
@@ -79,6 +87,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
 
   }
 
+  //Definte Identify UPC API call
   const fetchData = async (detectedBarcode: string | null,) => {
     const response = await fetch(
       `/api/identify_upc?upc_id=` + detectedBarcode,
@@ -89,10 +98,10 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
         },
       }
     );
-
+    //If response is successful, set ingredient name and set identified status to true
+    //If unsuccessful, set identified status to false
     try {
       if(!response.ok) {
-        console.log("didnt find")
         setIdentified(false)
       }
       const responseBody = await response.text();
@@ -104,7 +113,6 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       } else if (data.data.Item) {
         setIngredientName(data.data.Item.ingredient.S);
         setIdentified(true)
-        // console.log(data.data.Item.ingredient.S, "HERE IT COMES!!!");
       } else {
         setIdentified(false)
       }
@@ -113,6 +121,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     }
   };
 
+  //Provides video element to take an image and a button to trigger API call to identify UPC barcode using Quagga
   return (
     <div id="barcode-scanner">
       

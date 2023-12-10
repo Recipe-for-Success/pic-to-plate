@@ -1,8 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
 import IconButton from './buttons/IconButton';
-import { useIngredients } from './IngredientContext';
 import Delete from './icons/Delete';
+
+//Interface for IngredientCard
 interface IngredientCardProps {
   id: string;
   src: string;
@@ -10,6 +11,8 @@ interface IngredientCardProps {
   label: string;
   onDelete: (id: string) => void
 }
+
+//Displays Ingredient image, label, and provides IconButton to delete the ingredient
 const IngredientCard: React.FC<IngredientCardProps> = ({ id, src, alt, label, onDelete }) => {
   return (
     <div className="relative rounded-sm overflow-hidden">

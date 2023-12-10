@@ -8,19 +8,27 @@ import { useBarcode } from '../../../components/BarcodeContext'
 
 //This page shows the results from the ingredient identification step.
 //It allows the user to confirm the ingredient, or reject the ingredient and provide a confirmation for the correct ingredient name.
-//It displays the product name, brand name, and the image captured for processing.
+//It displays the product name and the image captured for processing.
 //Input: Captured image, text field for correction, buttons
 //Output: New ingredient added to list with image and label
 const IngredientConfirmationPage = () => {
+  //UseIngredients context to setIngredients list
   const { setIngredients } = useIngredients()
+  //UseImage context to read/set captured image
   const { image, setImage } = useImage()
+  //UseBarcode context to read/set ingredient name
   const { ingredientName, setIngredientName } = useBarcode()
+  //Reference to input element
   const textRef = useRef<HTMLInputElement>(null)
+  //Randomized number for unique id generation
   const id = Math.random().toString(36).substring(7)
+  
+  //Add ingredient to ingredients list
   const handleAddIngredient = (newIngredient: { id: string; src: any; alt: string; label: string }) => {
     setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
   };
   
+  //Add ingredient using ingredientName as label
   const addIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
     const newIngredient = {
@@ -34,6 +42,7 @@ const IngredientConfirmationPage = () => {
     setImage(null)
   }
 
+  //Add ingredient using textbox input as label
   const affirmIngredient = () => {
     const convertedID = parseInt(id, 36) + 1
     if(textRef.current) {
@@ -51,6 +60,7 @@ const IngredientConfirmationPage = () => {
     }
   }
 
+  //Displays image captured, text showing identified ingredient, button to add without correction, and a button with text input to add with correction
   return (
     <>
       <div className="flex m-5 justify-center text-center text-3xl font-bold">Is this right?</div>

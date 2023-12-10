@@ -4,22 +4,26 @@ import TextButton from './buttons/TextButton';
 import { useImage } from './ImageContext'
 import { useBarcode } from './BarcodeContext';
 
-interface CapturedImage {
-  dataURL: string | null
-}
-
+//ImageScanner interface
 interface ScannerProps {
   onDataCapture?: (dataURL: string) => void
 }
 
+//Image Scanner manages displaying video stream from device camera, taking images from video stream, and calling identify_image API
 const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
+  //Reference to video element
   const videoRef = useRef<HTMLVideoElement>(null)
+  //UseImage context to set image for use on next page
   const { setImage } = useImage();
+  //useBarcode context to set ingredient name for use on next page
   const { setIngredientName } = useBarcode()
+
+  //UseEffect hook starts video stream when loading component
   useEffect(() => {
     getVideo()
   }, [])
 
+  //If video reference is available, set video source to device camera video
   const getVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: { width: 540 } })
@@ -39,6 +43,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       })
   }
 
+  //Capture image from video stream using canvas context
   const takeImage = () => {
     const video = videoRef.current
     if (video) {
@@ -58,6 +63,8 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     }
   }
 
+
+  //Define Identify Image API call
   const fetchData = async (dataURL: string) => {
     const response = await fetch(
       '/api/identify_image',
@@ -72,6 +79,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
       }
     );
 
+    //If response is successful, setIngredientName to returned ingredient name
     try {
       const responseBody = await response.text();
       const data = JSON.parse(responseBody);
@@ -81,6 +89,7 @@ const Scanner: React.FC<ScannerProps> = ({ onDataCapture }) => {
     }
   };
 
+  //Provides video element button to take image and a button to trigger API call to identify ingredient using ML model, also navigates to scanned image confirmation page
   return (
     <div id="image-scanner">
       <video id="image-scanner" ref={videoRef}></video>

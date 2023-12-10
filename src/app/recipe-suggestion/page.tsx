@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
 import TextButton from '../../../components/buttons/TextButton'
 import { useIngredients } from '../../../components/IngredientContext'
 import { useRecipes } from '../../../components/RecipeContext'
@@ -29,10 +28,12 @@ interface Recipe {
 //Input: List of ingredient names
 //Output: List of matched suggested recipes and link to recipe details
 const RecipeSuggestionPage = () => {
+  //Ingredients list to show the user their list of used ingredients
   const { ingredients } = useIngredients()
+  //Recipes data from useRecipes context
   const { recipe_id0, recipe_id1, recipe_id2, recipes0, recipes1, recipes2, setRecipes0, setRecipes1, setRecipes2 } = useRecipes()
-  const [newItem, setNewItem] = useState<Recipe>()
-  const [recipes, setRecipes] = useState<Recipe[]>([])
+
+  //State management for lazy loading 5 recipes as a time (boolean for completion and count of loaded recipes) for recipes with 0, 1, and 2 missing ingredients
   const [recipes0Loaded, setRecipes0Loaded] = useState(false)
   const [recipes1Loaded, setRecipes1Loaded] = useState(false)
   const [recipes2Loaded, setRecipes2Loaded] = useState(false)
@@ -41,15 +42,18 @@ const RecipeSuggestionPage = () => {
   const [loadedRecipeCount2, setLoadedRecipeCount2] = useState(0);
   const recipesPerPage = 5;
 
+  //Load 5 recipes from recipes with 0 missing ingredients
   const loadRecipes0 = async () => {
+    //Update indexes
     const startIndex = loadedRecipeCount0;
     const endIndex = startIndex + recipesPerPage;
 
+    //If recipes are loaded, do nothing and return
     if (recipes0Loaded) {
       return
     }
 
-    //Recipes with no missing ingredients
+    //Loop through next 5 recipe ids and create recipe object for data returned, adding recipe object to recipes0 and updating loaded recipe count
     for (let i = startIndex; i < endIndex && i < recipe_id0.length; i++) {
       const newItemVal = await fetchData(recipe_id0[i])
       if (newItemVal) {
@@ -77,19 +81,25 @@ const RecipeSuggestionPage = () => {
         setLoadedRecipeCount0((prevCount) => prevCount + 1);
       }
     }
+    //Check if all recipes have been loaded
     if (loadedRecipeCount0 >= recipe_id0.length) {
       setRecipes0Loaded(true)
     }
   }
 
+  
+  //Load 5 recipes from recipes with 1 missing ingredient
   const loadRecipes1 = async () => {
+    //Update indexes
     const startIndex = loadedRecipeCount1;
     const endIndex = startIndex + recipesPerPage;
-    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id1.length - startIndex) + "\n" + recipes1Loaded)
+    
+    //If recipes are loaded, do nothing and return
     if (recipes1Loaded) {
       return
     }
-    //Recipes with one missing ingredient
+
+    //Loop through next 5 recipe ids and create recipe object for data returned, adding recipe object to recipes0 and updating loaded recipe count
     for (let i = startIndex; i < endIndex && i < recipe_id1.length; i++) {
       const newItemVal = await fetchData(recipe_id1[i])
       if (newItemVal) {
@@ -118,20 +128,24 @@ const RecipeSuggestionPage = () => {
         setLoadedRecipeCount1((prevCount) => prevCount + 1);
       }
     }
+    //Check if all recipes have been loaded
     if (loadedRecipeCount1 >= recipe_id1.length) {
       setRecipes1Loaded(true)
     }
   }
 
+  //Load 5 recipes from recipes with 2 missing ingredients
   const loadRecipes2 = async () => {
+    //Update indexes
     const startIndex = loadedRecipeCount2;
     const endIndex = startIndex + recipesPerPage;
-    console.log("Loading Remaining Recipes: \n Starting index: " + startIndex + " , Ending index: " + endIndex + "\n" + "Recipes remaining: " + (recipe_id2.length - startIndex) + "\n" + recipes2Loaded)
+
+    //If recipes are loaded, do nothing and return
     if (recipes2Loaded) {
       return
     }
 
-    //Recipes with two missing ingredients
+    //Loop through next 5 recipe ids and create recipe object for data returned, adding recipe object to recipes0 and updating loaded recipe count
     for (let i = startIndex; i < endIndex && i < recipe_id2.length; i++) {
       const newItemVal = await fetchData(recipe_id2[i])
       if (newItemVal) {
@@ -160,11 +174,14 @@ const RecipeSuggestionPage = () => {
         setLoadedRecipeCount2((prevCount) => prevCount + 1);
       }
     }
+
+    //Check if all recipes have been loaded
     if (loadedRecipeCount2 >= recipe_id2.length) {
       setRecipes2Loaded(true)
     }
   }
 
+  //Define getRecipe API call
   const fetchData = async (recipeID: number) => {
     const response = await fetch(
       `/api/getRecipe?recipe_id=` + String(recipeID),
@@ -175,7 +192,7 @@ const RecipeSuggestionPage = () => {
         },
       }
     );
-
+    //If successful, set newItemVal to returned recipe data and return newItemVal
     try {
       const responseBody = await response.text();
 
@@ -188,7 +205,7 @@ const RecipeSuggestionPage = () => {
       console.error('Error:', error.message);
     }
   };
-
+  //Displays three dropdowns for 0, 1, and 2, missing ingredient recipes. Displays list of ingredients used for recipe collection. Provides button to load recipes in RecipeDropDown and a button to go back to edit ingredients list
   return (
     <>
       {/* Ingredients List */}
@@ -207,10 +224,6 @@ const RecipeSuggestionPage = () => {
       <RecipeDropdown recipes={recipes1} numMissing='One' loadRecipes={loadRecipes1} recipesRemaining={(recipe_id1.length - loadedRecipeCount1)}></RecipeDropdown>
       <RecipeDropdown recipes={recipes2} numMissing='Two' loadRecipes={loadRecipes2} recipesRemaining={(recipe_id2.length - loadedRecipeCount2)}></RecipeDropdown>
 
-      {/* Load Recipes  */}
-      {/* <div className="flex justify-center">
-        <TextButton text="Load Recipes" onClick={loadRecipes0}></TextButton>
-      </div> */}
       <div className="flex justify-center">
         {/* Back to Recipes Button  */}
         <TextButton text="Back to Ingredient Editor" route="/ingredients-list"></TextButton>

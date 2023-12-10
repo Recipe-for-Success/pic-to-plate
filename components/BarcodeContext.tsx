@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
+//Interface for BarcodeContext
 interface BarcodeContextProps {
   detectedBarcode: string | null;
   setDetectedBarcode: React.Dispatch<React.SetStateAction<string | null>>;
@@ -17,6 +18,7 @@ interface BarcodeProviderProps {
   children: ReactNode;
 }
 
+//Define type for UPC data
 type UPCData = {
   UPC: {
     N: number
@@ -29,12 +31,18 @@ type UPCData = {
   }
 }
 
+//Create barcode context using Barcode properties
 const BarcodeContext = createContext<BarcodeContextProps | undefined>(undefined);
 
+//Barcode Provider Component manages state of UPC Data
 export const BarcodeProvider: React.FC<BarcodeProviderProps> = ({ children }) => {
+  //string for barcode numbers
   const [detectedBarcode, setDetectedBarcode] = useState<string | null>(null);
+  //boolean for setting successful identification
   const [identified, setIdentified] = useState<boolean>(false)
+  //string for ingredient name returned from API call
   const [ingredientName, setIngredientName] = useState<string>('');
+  //UPCData Object to read data from
   const [newItem, setNewItem] = useState<UPCData | null>(null);
 
   return (
@@ -44,6 +52,7 @@ export const BarcodeProvider: React.FC<BarcodeProviderProps> = ({ children }) =>
   );
 };
 
+//Define and export useBarcode as context provider for barcodes
 export const useBarcode = () => {
   const context = useContext(BarcodeContext);
   if (!context) {

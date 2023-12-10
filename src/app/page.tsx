@@ -1,6 +1,7 @@
 
 import TextButton from '../../components/buttons/TextButton'
 
+//Home page shows background image for website with a button to Explore Now
 export default function Home() {
   return (
     <main className="flex flex-col">

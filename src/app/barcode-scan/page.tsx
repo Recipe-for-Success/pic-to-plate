@@ -8,6 +8,7 @@ import BarcodeScanner from '../../../components/BarcodeScanner'
 //Input: Scanner (Camera feed), Buttons
 //Output: UPC Product Name and Captured Image
 const BarcodeScanPage = () => {
+  //Provides BarcodeScanner component
   return (
     <>
       <div className="flex m-5 justify-center text-center text-3xl font-bold">Scan Barcode</div>

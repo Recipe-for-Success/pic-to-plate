@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import Camera from '../../../components/icons/Camera'
 import Video from '../../../components/icons/Video'
 import TextButton from '../../../components/buttons/TextButton'
@@ -13,13 +13,17 @@ import { useRecipes } from '../../../components/RecipeContext'
 //Input: Buttons
 //Output: Current list of ingredients
 const IngredientsListPage = () => {
+  //UseIngredients to read/set ingredients list
   const { ingredients, setIngredients } = useIngredients()
+  //UseRecipes to set recipe id list and recipe list for recipes with 0, 1, and 2 missing ingredients
   const { setRecipe_id0, setRecipe_id1, setRecipe_id2, setRecipes0, setRecipes1, setRecipes2 } = useRecipes()
 
+  //Delete ingredient from ingredients list
   const handleDeleteIngredient = (id: string) => {
     setIngredients((prevIngredients) => prevIngredients.filter((ingredient) => ingredient.id !== id));
   };
 
+  //Define Suggest Recipes API call
   const fetchData = async () => {
     const queryString: string = ingredients
       .map((ingredient) => `&ID=${ingredient.label}`)
@@ -37,11 +41,11 @@ const IngredientsListPage = () => {
         },
       }
     );
-
+    //Set recipe ids to returned data
     try {
       const responseBody = await response.text();
       const data = JSON.parse(responseBody);
-      //Use data to get Recipes
+      //Set recipe ids to returned lists of ids
       setRecipe_id0(data.data[0])
       setRecipe_id1(data.data[1])
       setRecipe_id2(data.data[2])
@@ -50,7 +54,8 @@ const IngredientsListPage = () => {
       console.error('Error:', error.message);
     }
   };
-
+  //Displays interface for building ingredients list. 
+  //Provides buttons to navigate to barcode scan/image identification interfaces.
   return (
     <>
       <div>

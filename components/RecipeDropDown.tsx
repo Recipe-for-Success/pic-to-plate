@@ -1,10 +1,11 @@
 // components/RecipeDropdown.tsx
 "use client"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import TextButton from './buttons/TextButton';
 import Link from 'next/link';
 import { useRecipes } from './RecipeContext';
 
+//Recipe interface
 interface Recipe {
     ID: number
     author: string
@@ -24,18 +25,21 @@ interface Recipe {
     sugar: number
 }
 
+//Interface for Dropdown Component
 interface RecipeDropdownProps {
     recipes: Recipe[];
     numMissing: string
     recipesRemaining: number
     loadRecipes: () => void
 }
-
+//RecipeDropdown component manages loading recipes for the user. 
 const RecipeDropdown: React.FC<RecipeDropdownProps> = ({ recipes, numMissing, recipesRemaining, loadRecipes}) => {
+    //boolean for toggling dropdown
     const [isOpen, setIsOpen] = useState(false);
+    //Use recipes context to access fetched recipe data
     const { recipes0, recipes1, recipes2 } = useRecipes()
     
-    
+    //Open/Close dropdown, load 5 recipes if available after opening
     const toggleDropdown = () => {
         if(!isOpen && recipesRemaining > 0) {
             loadRecipes()
@@ -45,10 +49,11 @@ const RecipeDropdown: React.FC<RecipeDropdownProps> = ({ recipes, numMissing, re
 
     return (
         <div className="flex-col justify-center">
+            {/* Dropdown toggle button */}
             <div className="flex mx-auto justify-center">
                 <TextButton text={isOpen ? 'Minimize Recipes with ' + numMissing + ' Ingredients Missing' : 'View Recipes with ' + numMissing + ' Ingredients Missing'} onClick={toggleDropdown} className="bg-blue-500 text-white px-4 py-2 rounded focus:outline-none"></TextButton>
             </div>
-
+            {/* Display recipe when dropdown is open and recipes length is greater than 0. Otherwise, show No Recipes Found */}
             {isOpen && (
                 <div className="">
                     {recipes.length === 0 ? (

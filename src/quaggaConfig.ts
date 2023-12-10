@@ -1,5 +1,6 @@
 import Quagga from "quagga";
 
+//Initializes instance of Quagga with specific configuration to be used in application
 const configureQuagga = (quaggaInstance: typeof Quagga) => {
     const targetElement = document.querySelector('#barcode-scanner') as HTMLElement | null;
   

@@ -16,6 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  //Providers are nested outside of body to allow context data to be accessed throughout application
   return (
     <html lang="en">
       <Providers>
