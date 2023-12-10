@@ -4,6 +4,7 @@ type ImageBase64 = {
   data: string;
 };
 
+// Pass ingredient image data to model server and get back and return the identified ingredient name. 
 export const POST = async (request: NextRequest) => {
   try {
     const requestBody = await request.text();
@@ -13,6 +14,7 @@ export const POST = async (request: NextRequest) => {
       image: imageData.data,
     });
 
+    // Uploading image to model server
     const imageResponse = await fetch('http://localhost:8000/recognize_image', {
       method: "POST",
       headers: {

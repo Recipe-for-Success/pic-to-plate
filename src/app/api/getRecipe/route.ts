@@ -2,10 +2,12 @@ import { NextRequest } from "next/server";
 import { readItem } from "../utils";
 import { GetItemCommandOutput } from "@aws-sdk/client-dynamodb";
 
+// Get recipe by ID from Recipe Table in Dynamo 
 export const GET = async(request: NextRequest) => {
     let recipe_string: string | null = new URLSearchParams(request.url.split('?')[1]).get('recipe_id');
     let recipe_ID: number;
 
+    // Converting string to number
     if (recipe_string) {
       recipe_ID = +recipe_string;
     } else {

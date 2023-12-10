@@ -12,6 +12,7 @@ type ingredientCountType = {
     counts: {L: {N: number}[]}
 }
 
+// Suggest recipes based on provided ingredients. 
 export const GET = async(request: NextRequest) => {
     const searchParams = new URLSearchParams(request.url.split('?')[1]);
     let ingredients_string: string[] = searchParams.getAll("ID");
@@ -21,6 +22,7 @@ export const GET = async(request: NextRequest) => {
         readBatch("IngredientRecipeCounts", "ID", "S", ingredients_string)
     ]);
 
+    // Make sure that the search for all ingredients was successful
     if (!(itemData.Responses?.Ingredient && countData.Responses?.IngredientRecipeCounts)) {
         return;
     }
@@ -28,9 +30,11 @@ export const GET = async(request: NextRequest) => {
     let ingredients = Array.from(itemData.Responses.Ingredient) as unknown as ingredientType[];
     let ingredientCounts = Array.from(countData.Responses.IngredientRecipeCounts) as unknown as ingredientCountType[];
 
+    // Sort (alphabetically by ID - arbitrary) to ensure valid comparison between the two arrays 
     ingredients.sort((a, b) => a.ID.S.localeCompare(b.ID.S));
     ingredientCounts.sort((a, b) => a.ID.S.localeCompare(b.ID.S));
 
+    // The dynamic count of ingredients in each recipe, the recipes that can be made, those needing 1 more ingredient, and those needing 2 more, respectively
     let dynamicRecipeCounts: { [key: number]: number } = {}, displayRecipes: number[] = [], oneMissing: number[] = [], twoMissing: number[] = [];
 
     for (let i = 0; i < ingredients?.length; i++) {
@@ -41,8 +45,10 @@ export const GET = async(request: NextRequest) => {
         }
     }
 
+    // The fixed count of ingredients in each recipe
     const recipeCounts: { [key: number]: number } = {...dynamicRecipeCounts};
 
+    // Counting down ingredients in each recipe
     for (let i of ingredients) {
         for (let j of i.recipes.L) {
             dynamicRecipeCounts[+j.N]--;
@@ -63,6 +69,7 @@ export const GET = async(request: NextRequest) => {
         }
     }
     
+    // Eliminate possible duplication
     displayRecipes = Array.from(new Set(displayRecipes));
     oneMissing = Array.from(new Set(oneMissing));
     twoMissing = Array.from(new Set(twoMissing));
