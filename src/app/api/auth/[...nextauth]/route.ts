@@ -1,5 +1,6 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google"
+// Auth for Google Login
 
 const handler = NextAuth({
     providers:[

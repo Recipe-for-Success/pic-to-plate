@@ -1,10 +1,12 @@
 import { PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, AttributeValue, BatchGetItemCommand, BatchGetItemCommandOutput} from '@aws-sdk/client-dynamodb'; 
 import dbclient from '@/lib/dynamodb';
 
+// Ensure right format
 const convertToAttributeValue = (value: string | number): AttributeValue => {
   return typeof value === "number" ? { N: value.toString() } : { S: value };
 };
 
+// Read a single item from any table
 export const readItem = async (tableName: string, keyName: string, keyType: string, keyValue: number | string) => {
     const key: Record<string, AttributeValue> = {};
     key[keyName] = convertToAttributeValue(keyValue);
@@ -19,6 +21,7 @@ export const readItem = async (tableName: string, keyName: string, keyType: stri
     return response;
 }
 
+// Read a batch of items from any table.
 export const readBatch = async(tableName: string, keyName: string, keyType: string, keyValues: number[] | string[]) => {
     let keysList: Record<string, AttributeValue>[] = [];
 
@@ -40,6 +43,7 @@ export const readBatch = async(tableName: string, keyName: string, keyType: stri
 
     const response = await dbclient.send(command);
 
+    // Split up batches into mini-batches of 100 as required by Dynamo.
     for (let i = 1; i < numBatches; i++) {
         let start = 100 * i;
         let end = Math.min(100 * (i+1), keysList.length);
@@ -60,6 +64,7 @@ export const readBatch = async(tableName: string, keyName: string, keyType: stri
     return response;
 }
 
+// Update a single item in any table
 export const updateItem = async (tableName: string, keyName: string, keyType: string, keyValue: number, updateExpression: string, expressionAttributeValues: Record<string, AttributeValue>) => {
     const key: Record<string, AttributeValue> = {};
     key[keyName] = convertToAttributeValue(keyValue);
@@ -77,6 +82,7 @@ export const updateItem = async (tableName: string, keyName: string, keyType: st
     return response;    
 }
 
+// Delete a single item in any table
 export const deleteItem = async (tableName: string, keyName: string, keyType: string, keyValue: any) => {
     const key: Record<string, AttributeValue> = {};
     key[keyName] = convertToAttributeValue(keyValue);
