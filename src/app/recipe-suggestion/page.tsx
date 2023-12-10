@@ -24,6 +24,25 @@ interface Recipe {
   sugar: number
 }
 
+type RecipeType = {
+  ID: { N: number }
+  author: { S: string }
+  calories: { N: number }
+  carbs: { N: number }
+  created: { S: string }
+  description: { S: string }
+  fat: { N: number }
+  ingredient_text: { L: string[] }
+  ingredients: { SS: string[] }
+  link: { S: string }
+  name: { S: string }
+  protein: { N: number }
+  satFat: { N: number }
+  sodium: { N: number }
+  steps: { L: string[] }
+  sugar: { N: number }
+}
+
 //This page will show the list of recipe suggestions based on the list of ingredient names given.
 //Input: List of ingredient names
 //Output: List of matched suggested recipes and link to recipe details
@@ -198,7 +217,7 @@ const RecipeSuggestionPage = () => {
 
       const data = JSON.parse(responseBody);
 
-      const newItemVal: Recipe = data.data.Item;
+      const newItemVal: RecipeType = data.data.Item;
 
       return newItemVal;
     } catch (error: any) {
